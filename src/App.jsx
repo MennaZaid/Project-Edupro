@@ -20,20 +20,298 @@ const tokens = {
   },
 };
 
+// ─── Icons (Inline SVG) ─────────────────────────────────────────────────────
+const ICONS = {
+  recycle: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M7 7 5 10l2 3" />
+      <path d="M5 10h5" />
+      <path d="M17 7l2 3-2 3" />
+      <path d="M19 10h-5" />
+      <path d="M10 17l2 3 2-3" />
+      <path d="M12 20v-5" />
+      <path d="M7 7a6 6 0 0 1 10 0" />
+      <path d="M17 17a6 6 0 0 1-10 0" />
+    </svg>
+  ),
+  plug: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M9 3v6" />
+      <path d="M15 3v6" />
+      <path d="M7 9h10" />
+      <path d="M12 9v4a5 5 0 0 1-5 5" />
+      <path d="M12 13a5 5 0 0 0 5 5" />
+    </svg>
+  ),
+  chip: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <rect x="7" y="7" width="10" height="10" rx="2" />
+      <path d="M4 10h3M4 14h3M17 10h3M17 14h3M10 4v3M14 4v3M10 17v3M14 17v3" />
+    </svg>
+  ),
+  cog: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" />
+      <path d="M4 12h2M18 12h2M12 4v2M12 18v2" />
+      <path d="m6.5 6.5 1.4 1.4M16.1 16.1l1.4 1.4M17.5 6.5l-1.4 1.4M7.9 16.1l-1.4 1.4" />
+    </svg>
+  ),
+  antenna: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M12 12v8" />
+      <path d="M8 20h8" />
+      <path d="M5.5 9.5a9 9 0 0 1 13 0" />
+      <path d="M8.5 12.5a5 5 0 0 1 7 0" />
+      <circle cx="12" cy="12" r="1" />
+    </svg>
+  ),
+  leaf: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M4 14c6-7 13-8 16-8-1 8-7 13-12 14-2 .4-4-1.6-4-4z" />
+      <path d="M9 15c2-1 4-3 7-6" />
+    </svg>
+  ),
+  seedling: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M12 21v-7" />
+      <path d="M12 14c-4 0-7-3-7-7 4 0 7 3 7 7z" />
+      <path d="M12 14c4 0 7-2 7-6-4 0-7 2-7 6z" />
+    </svg>
+  ),
+  bolt: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" />
+    </svg>
+  ),
+  wifi: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M4.5 9.5a10 10 0 0 1 15 0" />
+      <path d="M7.5 12.5a6 6 0 0 1 9 0" />
+      <path d="M10.5 15.5a2 2 0 0 1 3 0" />
+      <circle cx="12" cy="18" r="1" />
+    </svg>
+  ),
+  battery: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <rect x="3" y="8" width="16" height="8" rx="2" />
+      <path d="M21 10v4" />
+      <path d="M6 12h7" />
+    </svg>
+  ),
+  microscope: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M6 20h12" />
+      <path d="M9 13h6" />
+      <path d="M9 3 12 6l-2 2-3-3 2-2z" />
+      <path d="M12 6l4 4-4 4" />
+      <path d="M7 17a5 5 0 0 1 5-5" />
+    </svg>
+  ),
+  puzzle: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M8 3h3a2 2 0 1 1 0 4H8v4h4a2 2 0 1 0 4 0V7h4v10h-4a2 2 0 1 1 0 4H8v-4H4V7h4V3z" />
+    </svg>
+  ),
+  swirl: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M4 12a8 8 0 0 1 13.7-5.6" />
+      <path d="M20 12a8 8 0 0 1-13.7 5.6" />
+      <path d="M16 7h4v4" />
+      <path d="M8 17H4v-4" />
+    </svg>
+  ),
+  warning: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M12 3 2 20h20L12 3z" />
+      <path d="M12 9v5" />
+      <path d="M12 17h.01" />
+    </svg>
+  ),
+  info: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 10v6" />
+      <path d="M12 7h.01" />
+    </svg>
+  ),
+  check: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M5 13l4 4L19 7" />
+    </svg>
+  ),
+  sun: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.5 4.5l2.1 2.1M17.4 17.4l2.1 2.1M19.5 4.5l-2.1 2.1M6.6 17.4l-2.1 2.1" />
+    </svg>
+  ),
+  moon: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+    </svg>
+  ),
+  heart: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M20.8 7.6a4.8 4.8 0 0 0-6.8 0L12 9.6l-2-2a4.8 4.8 0 0 0-6.8 6.8l2 2 6.8 6.8 6.8-6.8 2-2a4.8 4.8 0 0 0 0-6.8z" />
+    </svg>
+  ),
+  heartOutline: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M20.8 7.6a4.8 4.8 0 0 0-6.8 0L12 9.6l-2-2a4.8 4.8 0 0 0-6.8 6.8l2 2 6.8 6.8 6.8-6.8 2-2a4.8 4.8 0 0 0 0-6.8z" fill="none" />
+    </svg>
+  ),
+  cart: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M6 6h14l-2 8H7L6 4H3" />
+      <circle cx="9" cy="19" r="1.5" />
+      <circle cx="17" cy="19" r="1.5" />
+    </svg>
+  ),
+  bell: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M18 8a6 6 0 1 0-12 0c0 7-2 7-2 7h16s-2 0-2-7" />
+      <path d="M10 19a2 2 0 0 0 4 0" />
+    </svg>
+  ),
+  globe: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18" />
+      <path d="M12 3a12 12 0 0 1 0 18" />
+      <path d="M12 3a12 12 0 0 0 0 18" />
+    </svg>
+  ),
+  upload: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M12 16V6" />
+      <path d="M8 10l4-4 4 4" />
+      <path d="M4 18h16" />
+    </svg>
+  ),
+  search: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <circle cx="11" cy="11" r="7" />
+      <path d="M20 20l-3.5-3.5" />
+    </svg>
+  ),
+  handshake: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M8 13l3 3a3 3 0 0 0 4.2 0l3.8-3.8" />
+      <path d="M2 10l4-4 6 6" />
+      <path d="M22 10l-4-4-5 5" />
+    </svg>
+  ),
+  location: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z" />
+      <circle cx="12" cy="9" r="2.5" />
+    </svg>
+  ),
+  cash: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <rect x="3" y="6" width="18" height="12" rx="2" />
+      <circle cx="12" cy="12" r="3" />
+      <path d="M7 9h.01M17 15h.01" />
+    </svg>
+  ),
+  package: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M12 3 3 7l9 4 9-4-9-4z" />
+      <path d="M3 7v10l9 4 9-4V7" />
+      <path d="M12 11v10" />
+    </svg>
+  ),
+  tag: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M3 12V4h8l10 10-8 8L3 12z" />
+      <circle cx="7" cy="8" r="1.5" />
+    </svg>
+  ),
+  message: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M21 15a4 4 0 0 1-4 4H7l-4 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
+    </svg>
+  ),
+  chart: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M4 19h16" />
+      <path d="M7 16V9" />
+      <path d="M12 16V5" />
+      <path d="M17 16v-6" />
+    </svg>
+  ),
+  grid: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <rect x="4" y="4" width="7" height="7" rx="1" />
+      <rect x="13" y="4" width="7" height="7" rx="1" />
+      <rect x="4" y="13" width="7" height="7" rx="1" />
+      <rect x="13" y="13" width="7" height="7" rx="1" />
+    </svg>
+  ),
+  plus: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  ),
+  door: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M6 3h10a2 2 0 0 1 2 2v16H6z" />
+      <path d="M10 12h.01" />
+    </svg>
+  ),
+  calendar: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M16 3v4M8 3v4M3 9h18" />
+    </svg>
+  ),
+  trophy: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M6 4h12v3a6 6 0 0 1-12 0V4z" />
+      <path d="M4 4h2v3a4 4 0 0 1-2-3z" />
+      <path d="M18 4h2a4 4 0 0 1-2 3V4z" />
+      <path d="M8 20h8" />
+      <path d="M12 13v7" />
+    </svg>
+  ),
+  campus: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M3 10 12 5l9 5-9 5-9-5z" />
+      <path d="M5 12v6h14v-6" />
+      <path d="M9 18v-4h6v4" />
+    </svg>
+  ),
+  close: (p) => (
+    <svg viewBox="0 0 24 24" {...p}>
+      <path d="M6 6l12 12M18 6l-12 12" />
+    </svg>
+  ),
+};
+
+function Icon({ name, size = 18, color = "currentColor" }) {
+  const IconSvg = ICONS[name];
+  if (!IconSvg) return null;
+  return (
+    <span style={{ display: "inline-flex", width: size, height: size, color }} aria-hidden="true">
+      {IconSvg({ width: size, height: size, fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" })}
+    </span>
+  );
+}
+
 // ─── Data ────────────────────────────────────────────────────────────────────
 const WASTE_ITEMS = [
-  { id:1, name:"Arduino Uno R3 Kit", category:"electronics", price:120, unit:"EGP", condition:"Good", availability:"available", provider:"Omar K.", rating:4.8, reviews:23, emoji:"🔌", tags:["Arduino","PCB","Embedded"], description:"Complete Arduino Uno kit with breadboard, 65 jumper wires, and 20+ sensors. Diverted from landfill — tested and working.", location:"AUC New Cairo", campus:"auc-nc", listed:"2 days ago", views:142, wasteKg:0.28 },
-  { id:2, name:"Raspberry Pi 4 (4GB)", category:"electronics", price:650, unit:"EGP", condition:"Excellent", availability:"available", provider:"Sara M.", rating:4.9, reviews:11, emoji:"💾", tags:["RPi","Linux","IoT"], description:"Raspberry Pi 4 Model B, 4GB RAM. Includes official case, heatsinks, and micro-HDMI cable. Keeps 112g of e-waste out of landfills.", location:"AUC Tahrir", campus:"auc-t", listed:"1 day ago", views:98, wasteKg:0.11 },
-  { id:3, name:"Acrylic Sheet Set (A3)", category:"materials", price:85, unit:"EGP", condition:"New", availability:"available", provider:"Faculty Store", rating:4.5, reviews:7, emoji:"♻️", tags:["Acrylic","Laser-cut","Structure"], description:"5x A3 clear acrylic sheets, 3mm. Surplus stock — unused, sealed. Circular reuse over disposal.", location:"AUC New Cairo", campus:"auc-nc", listed:"Today", views:34, wasteKg:0.60 },
-  { id:4, name:"L298N Motor Driver x3", category:"components", price:60, unit:"EGP", condition:"Good", availability:"reserved", provider:"Karim A.", rating:4.7, reviews:15, emoji:"⚙️", tags:["Motor","Driver","DC"], description:"Three L298N dual H-bridge motor drivers. Fully tested, prevents 45g of circuit board waste.", location:"GUC", campus:"guc", listed:"3 days ago", views:78, wasteKg:0.045 },
-  { id:5, name:"HC-SR04 Ultrasonic x5", category:"sensors", price:75, unit:"EGP", condition:"Good", availability:"available", provider:"Nour H.", rating:4.6, reviews:9, emoji:"📡", tags:["Sensor","Ultrasonic","Distance"], description:"Pack of 5 ultrasonic sensors, all calibrated. Sharing sensors reduces manufacturing demand.", location:"AUC New Cairo", campus:"auc-nc", listed:"Today", views:56, wasteKg:0.03 },
-  { id:6, name:"PLA Filament 1kg (White)", category:"materials", price:180, unit:"EGP", condition:"New", availability:"available", provider:"Mona S.", rating:4.4, reviews:6, emoji:"🌿", tags:["3D-Print","PLA","Biodegradable"], description:"1kg PLA filament, 1.75mm — unopened. PLA is plant-based and compostable. Sharing unused spools reduces virgin plastic use.", location:"BUE", campus:"bue", listed:"2 days ago", views:44, wasteKg:1.0 },
-  { id:7, name:"SG90 Servo Motor x6", category:"components", price:90, unit:"EGP", condition:"Excellent", availability:"available", provider:"Ali R.", rating:4.8, reviews:18, emoji:"🔩", tags:["Servo","Motor","Robotics"], description:"Six SG90 9g mini servos, full 180° range. Includes extension cables and mounting hardware.", location:"AUC New Cairo", campus:"auc-nc", listed:"5 days ago", views:203, wasteKg:0.06 },
-  { id:8, name:"ESP32 Dev Board x2", category:"electronics", price:200, unit:"EGP", condition:"Good", availability:"available", provider:"Layla F.", rating:4.7, reviews:12, emoji:"📶", tags:["ESP32","WiFi","BLE","IoT"], description:"Two ESP32-WROOM-32 boards, WiFi and BT verified. Giving these a second life extends e-waste lifespan.", location:"AUC New Cairo", campus:"auc-nc", listed:"1 day ago", views:115, wasteKg:0.04 },
-  { id:9, name:"LiPo Battery Pack 2200mAh", category:"components", price:110, unit:"EGP", condition:"Good", availability:"available", provider:"Hassan B.", rating:4.5, reviews:8, emoji:"🔋", tags:["Battery","LiPo","Power"], description:"2200mAh 3S 11.1V LiPo. Proper reuse prevents toxic battery chemicals from reaching soil.", location:"Cairo University", campus:"cu", listed:"4 days ago", views:67, wasteKg:0.185 },
-  { id:10, name:"Logic Analyzer 8-Ch USB", category:"equipment", price:160, unit:"EGP", condition:"Excellent", availability:"available", provider:"Rania T.", rating:4.9, reviews:4, emoji:"🔬", tags:["Logic","Analyzer","Debug"], description:"8-channel USB logic analyzer, compatible with PulseView and Saleae. Sharing lab equipment = lower per-student carbon footprint.", location:"AUC New Cairo", campus:"auc-nc", listed:"Today", views:29, wasteKg:0.08 },
-  { id:11, name:"Breadboard + Jumper Kit", category:"components", price:45, unit:"EGP", condition:"Good", availability:"available", provider:"Dina M.", rating:4.3, reviews:21, emoji:"🧩", tags:["Breadboard","Jumper","Prototyping"], description:"Full-size 830-point breadboard plus 120-piece jumper wire set. Pass-it-on culture reduces demand for new units.", location:"AUC New Cairo", campus:"auc-nc", listed:"1 week ago", views:189, wasteKg:0.12 },
-  { id:12, name:"Stepper Motor + Driver Set", category:"components", price:135, unit:"EGP", condition:"Good", availability:"reserved", provider:"Youssef A.", rating:4.6, reviews:7, emoji:"🌀", tags:["Stepper","NEMA17","CNC"], description:"NEMA17 stepper with A4988 driver and heatsink. Removed from a CNC project, all tested.", location:"Ain Shams", campus:"ashu", listed:"3 days ago", views:51, wasteKg:0.22 },
+  { id:1, name:"Arduino Uno R3 Kit", category:"electronics", price:120, unit:"EGP", condition:"Good", availability:"available", provider:"Omar K.", rating:4.8, reviews:23, icon:"plug", tags:["Arduino","PCB","Embedded"], description:"Complete Arduino Uno kit with breadboard, 65 jumper wires, and 20+ sensors. Diverted from landfill — tested and working.", location:"AUC New Cairo", campus:"auc-nc", listed:"2 days ago", views:142, wasteKg:0.28 },
+  { id:2, name:"Raspberry Pi 4 (4GB)", category:"electronics", price:650, unit:"EGP", condition:"Excellent", availability:"available", provider:"Sara M.", rating:4.9, reviews:11, icon:"chip", tags:["RPi","Linux","IoT"], description:"Raspberry Pi 4 Model B, 4GB RAM. Includes official case, heatsinks, and micro-HDMI cable. Keeps 112g of e-waste out of landfills.", location:"AUC Tahrir", campus:"auc-t", listed:"1 day ago", views:98, wasteKg:0.11 },
+  { id:3, name:"Acrylic Sheet Set (A3)", category:"materials", price:85, unit:"EGP", condition:"New", availability:"available", provider:"Faculty Store", rating:4.5, reviews:7, icon:"recycle", tags:["Acrylic","Laser-cut","Structure"], description:"5x A3 clear acrylic sheets, 3mm. Surplus stock — unused, sealed. Circular reuse over disposal.", location:"AUC New Cairo", campus:"auc-nc", listed:"Today", views:34, wasteKg:0.60 },
+  { id:4, name:"L298N Motor Driver x3", category:"components", price:60, unit:"EGP", condition:"Good", availability:"reserved", provider:"Karim A.", rating:4.7, reviews:15, icon:"cog", tags:["Motor","Driver","DC"], description:"Three L298N dual H-bridge motor drivers. Fully tested, prevents 45g of circuit board waste.", location:"GUC", campus:"guc", listed:"3 days ago", views:78, wasteKg:0.045 },
+  { id:5, name:"HC-SR04 Ultrasonic x5", category:"sensors", price:75, unit:"EGP", condition:"Good", availability:"available", provider:"Nour H.", rating:4.6, reviews:9, icon:"antenna", tags:["Sensor","Ultrasonic","Distance"], description:"Pack of 5 ultrasonic sensors, all calibrated. Sharing sensors reduces manufacturing demand.", location:"AUC New Cairo", campus:"auc-nc", listed:"Today", views:56, wasteKg:0.03 },
+  { id:6, name:"PLA Filament 1kg (White)", category:"materials", price:180, unit:"EGP", condition:"New", availability:"available", provider:"Mona S.", rating:4.4, reviews:6, icon:"leaf", tags:["3D-Print","PLA","Biodegradable"], description:"1kg PLA filament, 1.75mm — unopened. PLA is plant-based and compostable. Sharing unused spools reduces virgin plastic use.", location:"BUE", campus:"bue", listed:"2 days ago", views:44, wasteKg:1.0 },
+  { id:7, name:"SG90 Servo Motor x6", category:"components", price:90, unit:"EGP", condition:"Excellent", availability:"available", provider:"Ali R.", rating:4.8, reviews:18, icon:"bolt", tags:["Servo","Motor","Robotics"], description:"Six SG90 9g mini servos, full 180° range. Includes extension cables and mounting hardware.", location:"AUC New Cairo", campus:"auc-nc", listed:"5 days ago", views:203, wasteKg:0.06 },
+  { id:8, name:"ESP32 Dev Board x2", category:"electronics", price:200, unit:"EGP", condition:"Good", availability:"available", provider:"Layla F.", rating:4.7, reviews:12, icon:"wifi", tags:["ESP32","WiFi","BLE","IoT"], description:"Two ESP32-WROOM-32 boards, WiFi and BT verified. Giving these a second life extends e-waste lifespan.", location:"AUC New Cairo", campus:"auc-nc", listed:"1 day ago", views:115, wasteKg:0.04 },
+  { id:9, name:"LiPo Battery Pack 2200mAh", category:"components", price:110, unit:"EGP", condition:"Good", availability:"available", provider:"Hassan B.", rating:4.5, reviews:8, icon:"battery", tags:["Battery","LiPo","Power"], description:"2200mAh 3S 11.1V LiPo. Proper reuse prevents toxic battery chemicals from reaching soil.", location:"Cairo University", campus:"cu", listed:"4 days ago", views:67, wasteKg:0.185 },
+  { id:10, name:"Logic Analyzer 8-Ch USB", category:"equipment", price:160, unit:"EGP", condition:"Excellent", availability:"available", provider:"Rania T.", rating:4.9, reviews:4, icon:"microscope", tags:["Logic","Analyzer","Debug"], description:"8-channel USB logic analyzer, compatible with PulseView and Saleae. Sharing lab equipment = lower per-student carbon footprint.", location:"AUC New Cairo", campus:"auc-nc", listed:"Today", views:29, wasteKg:0.08 },
+  { id:11, name:"Breadboard + Jumper Kit", category:"components", price:45, unit:"EGP", condition:"Good", availability:"available", provider:"Dina M.", rating:4.3, reviews:21, icon:"puzzle", tags:["Breadboard","Jumper","Prototyping"], description:"Full-size 830-point breadboard plus 120-piece jumper wire set. Pass-it-on culture reduces demand for new units.", location:"AUC New Cairo", campus:"auc-nc", listed:"1 week ago", views:189, wasteKg:0.12 },
+  { id:12, name:"Stepper Motor + Driver Set", category:"components", price:135, unit:"EGP", condition:"Good", availability:"reserved", provider:"Youssef A.", rating:4.6, reviews:7, icon:"swirl", tags:["Stepper","NEMA17","CNC"], description:"NEMA17 stepper with A4988 driver and heatsink. Removed from a CNC project, all tested.", location:"Ain Shams", campus:"ashu", listed:"3 days ago", views:51, wasteKg:0.22 },
 ];
 
 const CATEGORIES = ["all","electronics","components","sensors","materials","equipment"];
@@ -133,8 +411,8 @@ function Toast({ toasts }) {
           animation: "toastIn .22s ease",
           borderLeft: `3px solid ${t.type === "error" ? "var(--red)" : t.type === "info" ? "var(--blue)" : "var(--accent)"}`,
         }}>
-          <span style={{ fontSize: 16 }}>
-            {t.type === "error" ? "⚠️" : t.type === "info" ? "ℹ️" : "✅"}
+          <span>
+            <Icon name={t.type === "error" ? "warning" : t.type === "info" ? "info" : "check"} size={16} />
           </span>
           {t.msg}
         </div>
@@ -188,7 +466,7 @@ export default function GreenLoop() {
         addToast("Removed from basket", "info");
         return c.filter(x => x.id !== id);
       }
-      addToast(`Added to basket — ${item.wasteKg}kg e-waste saved! ♻️`);
+      addToast(`Added to basket — ${item.wasteKg}kg e-waste saved!`);
       return [...c, item];
     });
   }, [addToast]);
@@ -197,21 +475,21 @@ export default function GreenLoop() {
     const item = WASTE_ITEMS.find(r => r.id === id);
     setWishlist(w => {
       if (w.some(x => x.id === id)) { addToast("Removed from wishlist", "info"); return w.filter(x => x.id !== id); }
-      addToast("Saved to wishlist 🌿");
+      addToast("Saved to wishlist");
       return [...w, item];
     });
   }, [addToast]);
 
   const doLogin = useCallback(() => {
     setUser({ name: "Ahmed Mohamed", email: "demo@aucegypt.edu" });
-    setGuest(false); addToast("Welcome back, Ahmed! 🌱");
+    setGuest(false); addToast("Welcome back, Ahmed!");
     navigate("dashboard");
   }, [addToast, navigate]);
 
   const doSignup = useCallback((firstName, lastName, email) => {
     setUser({ name: `${firstName} ${lastName}`, email });
     setGuest(false);
-    addToast(`Welcome to GreenLoop, ${firstName}! 🎉`);
+    addToast(`Welcome to GreenLoop, ${firstName}!`);
     navigate("dashboard");
   }, [addToast, navigate]);
 
@@ -284,6 +562,30 @@ export default function GreenLoop() {
         .hover-row:hover { background: var(--bg2) !important; }
         .hover-scale:hover { transform: scale(1.05); }
         input::placeholder { color: var(--fg3); }
+        .leaderboard-table { width: 100%; }
+        @media (max-width: 960px) {
+          .footer-grid { grid-template-columns: 1fr 1fr !important; }
+          .steps-grid { grid-template-columns: 1fr !important; }
+          .item-grid { grid-template-columns: 1fr !important; }
+          .thumbs-grid { grid-template-columns: repeat(3, 1fr) !important; }
+          .dashboard-layout { grid-template-columns: 1fr !important; }
+          .dashboard-sidebar { position: relative !important; top: 0 !important; height: auto !important; }
+          .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .stats-grid-3 { grid-template-columns: repeat(2, 1fr) !important; }
+          .impact-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .impact-grid-2 { grid-template-columns: 1fr !important; }
+          .map-grid { grid-template-columns: 1fr !important; }
+          .leaderboard-head, .leaderboard-row { grid-template-columns: 40px 1fr 90px 70px 70px !important; }
+        }
+        @media (max-width: 640px) {
+          .footer-grid { grid-template-columns: 1fr !important; }
+          .stats-grid { grid-template-columns: 1fr !important; }
+          .stats-grid-3 { grid-template-columns: 1fr !important; }
+          .impact-grid { grid-template-columns: 1fr !important; }
+          .card-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important; }
+          .leaderboard-table { overflow-x: auto; }
+          .leaderboard-head, .leaderboard-row { min-width: 520px; }
+        }
       `}</style>
 
       <Navbar
@@ -336,7 +638,7 @@ function Navbar({ navigate, page, user, guest, theme, setTheme, cart, wishlist, 
           background:"linear-gradient(135deg,var(--accent),var(--teal))",
           display:"flex", alignItems:"center", justifyContent:"center",
           fontSize:16,
-        }}>♻</div>
+        }}><Icon name="recycle" size={16} /></div>
         <span style={{ fontFamily:"'Playfair Display',serif", fontSize:20, fontWeight:700, letterSpacing:"-.02em", color:"var(--fg0)" }}>
           GreenLoop
         </span>
@@ -364,22 +666,25 @@ function Navbar({ navigate, page, user, guest, theme, setTheme, cart, wishlist, 
         <button onClick={() => setTheme(t => t === "dark" ? "light" : "dark")} style={{
           padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)",
           color:"var(--fg2)", fontSize:14, transition:"all .2s",
-        }}>{theme === "dark" ? "☀" : "🌙"}</button>
+        }}>
+          <Icon name={theme === "dark" ? "sun" : "moon"} size={16} />
+        </button>
 
         {user ? (<>
           <button onClick={() => navigate("list-item")} style={{
             padding:"7px 14px", borderRadius:8, fontSize:12, fontWeight:600,
             background:"var(--accent)", color:"#fff", border:"1px solid transparent",
           }}>+ List Item</button>
-          <button onClick={() => navigate("wishlist")} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13 }}>
-            ♥{wishlist.length > 0 ? ` (${wishlist.length})` : ""}
+          <button onClick={() => navigate("wishlist")} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
+            <Icon name="heart" size={14} />{wishlist.length > 0 ? ` (${wishlist.length})` : ""}
           </button>
-          <button onClick={() => navigate("cart")} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13 }}>
-            🛒{cart.length > 0 ? ` (${cart.length})` : ""}
+          <button onClick={() => navigate("cart")} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
+            <Icon name="cart" size={14} />{cart.length > 0 ? ` (${cart.length})` : ""}
           </button>
           <div style={{ position:"relative" }}>
-            <button onClick={() => setNotifPanel(p => !p)} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13 }}>
-              🔔{unread > 0 ? <span style={{ fontSize:10, background:"var(--accent)", color:"#fff", borderRadius:10, padding:"1px 5px", marginLeft:3 }}>{unread}</span> : ""}
+            <button onClick={() => setNotifPanel(p => !p)} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
+              <Icon name="bell" size={14} />
+              {unread > 0 ? <span style={{ fontSize:10, background:"var(--accent)", color:"#fff", borderRadius:10, padding:"1px 5px", marginLeft:3 }}>{unread}</span> : ""}
             </button>
             {notifPanel && (
               <div style={{
@@ -412,8 +717,8 @@ function Navbar({ navigate, page, user, guest, theme, setTheme, cart, wishlist, 
           </div>
           <Avatar name={user.name} size={32} />
         </>) : guest ? (<>
-          <button onClick={() => navigate("cart")} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13 }}>
-            🛒{cart.length > 0 ? ` (${cart.length})` : ""}
+          <button onClick={() => navigate("cart")} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
+            <Icon name="cart" size={14} />{cart.length > 0 ? ` (${cart.length})` : ""}
           </button>
           <span style={{ fontSize:12, color:"var(--fg3)" }}>Guest</span>
           <button onClick={() => navigate("login")} style={{ padding:"7px 14px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg1)", fontSize:13 }}>Sign In</button>
@@ -432,16 +737,16 @@ function Footer({ navigate }) {
   return (
     <footer style={{ background:"var(--bg1)", borderTop:"1px solid var(--border)", padding:"40px 24px 28px", marginTop:"auto" }}>
       <div style={{ maxWidth:1140, margin:"0 auto" }}>
-        <div style={{ display:"grid", gridTemplateColumns:"2fr 1fr 1fr 1fr", gap:32, marginBottom:32 }}>
+        <div className="footer-grid" style={{ display:"grid", gridTemplateColumns:"2fr 1fr 1fr 1fr", gap:32, marginBottom:32 }}>
           <div>
             <div style={{ fontFamily:"'Playfair Display',serif", fontSize:22, fontWeight:700, marginBottom:8, color:"var(--fg0)" }}>
-              ♻ GreenLoop
+              <Icon name="recycle" size={18} /> GreenLoop
             </div>
             <p style={{ fontSize:13, color:"var(--fg3)", lineHeight:1.7, maxWidth:240 }}>
               A circular economy platform connecting students across Egyptian universities to share, sell, and rescue reusable components — fighting e-waste one component at a time.
             </p>
             <div style={{ marginTop:14 }}>
-              <Badge variant="green">🌍 92 kg e-waste diverted this semester</Badge>
+              <Badge variant="green"><span style={{ display:"inline-flex", alignItems:"center", gap:6 }}><Icon name="globe" size={12} />92 kg e-waste diverted this semester</span></Badge>
             </div>
           </div>
           {[
@@ -482,13 +787,13 @@ function PageHome({ navigate }) {
         background:"radial-gradient(ellipse 80% 60% at 50% 0%, rgba(34,197,94,.15) 0%, transparent 70%)",
       }}>
         {/* Floating leaves decoration */}
-        {["🌿","🍃","♻️","🌱"].map((l, i) => (
+        {[["leaf",26],["leaf",26],["recycle",26],["seedling",26]].map(([l, size], i) => (
           <div key={i} style={{
             position:"absolute", fontSize:28, opacity:.15,
             top:`${15 + i * 18}%`, left: i % 2 === 0 ? `${5 + i * 3}%` : `${80 + i * 3}%`,
             animation:`leafFloat ${3 + i}s ease-in-out infinite`,
             animationDelay:`${i * 0.7}s`,
-          }}>{l}</div>
+          }}><Icon name={l} size={size} /></div>
         ))}
 
         <div style={{ maxWidth:1140, margin:"0 auto" }}>
@@ -554,7 +859,7 @@ function PageHome({ navigate }) {
           border:"1px solid rgba(34,197,94,.2)", borderRadius:12, padding:"14px 20px",
           display:"flex", alignItems:"center", gap:12, marginBottom:24,
         }}>
-          <span style={{ fontSize:20 }}>🌍</span>
+          <span style={{ display:"inline-flex" }}><Icon name="globe" size={20} /></span>
           <div style={{ flex:1 }}>
             <div style={{ fontWeight:600, fontSize:13, color:"var(--accent)" }}>Semester End — May 2026</div>
             <div style={{ fontSize:12, color:"var(--fg2)" }}>40+ components need rescuing this week as seniors wrap up graduation projects</div>
@@ -574,7 +879,7 @@ function PageHome({ navigate }) {
           <button onClick={() => navigate("browse")} style={{ padding:"7px 14px", border:"1px solid var(--border)", borderRadius:8, color:"var(--fg2)", fontSize:13 }}>View all →</button>
         </div>
 
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))", gap:16 }}>
+        <div className="card-grid" style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))", gap:16 }}>
           {WASTE_ITEMS.slice(0, 8).map(r => (
             <ResourceCard key={r.id} r={r} navigate={navigate} inCart={() => false} inWish={() => false} addToCart={() => {}} toggleWish={() => {}} />
           ))}
@@ -587,14 +892,14 @@ function PageHome({ navigate }) {
         }}>
           <div style={{ fontFamily:"'DM Mono',monospace", fontSize:11, color:"var(--accent)", letterSpacing:".1em", textTransform:"uppercase", marginBottom:12 }}>How it works</div>
           <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:24, fontWeight:700, marginBottom:32 }}>Three steps to close the loop</h2>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:24, textAlign:"left" }}>
+          <div className="steps-grid" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:24, textAlign:"left" }}>
             {[
-              { n:"01", t:"List your components", d:"Upload photos and set a fair price for your old project parts. Takes under 2 minutes.", icon:"📤" },
-              { n:"02", t:"Match with students",  d:"Junior students discover exactly what they need via smart search and wishlist matching.", icon:"🔍" },
-              { n:"03", t:"Exchange on campus",   d:"Meet safely on campus. Seller recoups costs; buyer saves money. Zero landfill.", icon:"🤝" },
+              { n:"01", t:"List your components", d:"Upload photos and set a fair price for your old project parts. Takes under 2 minutes.", icon:"upload" },
+              { n:"02", t:"Match with students",  d:"Junior students discover exactly what they need via smart search and wishlist matching.", icon:"search" },
+              { n:"03", t:"Exchange on campus",   d:"Meet safely on campus. Seller recoups costs; buyer saves money. Zero landfill.", icon:"handshake" },
             ].map(s => (
               <div key={s.n} style={{ background:"var(--card)", border:"1px solid var(--border)", borderRadius:12, padding:20 }}>
-                <div style={{ fontSize:28, marginBottom:10 }}>{s.icon}</div>
+                <div style={{ marginBottom:10 }}><Icon name={s.icon} size={26} /></div>
                 <div style={{ fontFamily:"'DM Mono',monospace", fontSize:11, color:"var(--accent)", opacity:.6, marginBottom:4 }}>{s.n}</div>
                 <div style={{ fontWeight:600, marginBottom:8 }}>{s.t}</div>
                 <div style={{ color:"var(--fg2)", fontSize:13, lineHeight:1.6 }}>{s.d}</div>
@@ -610,7 +915,9 @@ function PageHome({ navigate }) {
         <p style={{ color:"var(--fg2)", fontSize:14, marginBottom:20 }}>Join 380+ students already making their campus more circular.</p>
         <div style={{ display:"flex", gap:12, justifyContent:"center", flexWrap:"wrap" }}>
           <button onClick={() => navigate("signup")} style={{ padding:"12px 24px", borderRadius:12, background:"var(--accent)", color:"#fff", fontWeight:600, fontSize:15 }}>Create free account →</button>
-          <button onClick={() => navigate("impact")} style={{ padding:"12px 24px", borderRadius:12, border:"1px solid var(--border2)", color:"var(--fg1)", fontSize:15 }}>See our impact ♻</button>
+          <button onClick={() => navigate("impact")} style={{ padding:"12px 24px", borderRadius:12, border:"1px solid var(--border2)", color:"var(--fg1)", fontSize:15, display:"flex", alignItems:"center", gap:8 }}>
+            <Icon name="recycle" size={16} /> See our impact
+          </button>
         </div>
       </div>
     </div>
@@ -630,12 +937,12 @@ function ResourceCard({ r, navigate, inCart, inWish, addToCart, toggleWish }) {
         height:140, background:"linear-gradient(135deg,var(--bg2),var(--bg3))",
         position:"relative", display:"flex", alignItems:"center", justifyContent:"center",
       }}>
-        <span style={{ fontSize:44, opacity:.85 }}>{r.emoji}</span>
+        <span style={{ fontSize:44, opacity:.85 }}><Icon name={r.icon} size={40} /></span>
         <div style={{ position:"absolute", top:8, right:8 }} onClick={e => { e.stopPropagation(); toggleWish(r.id); }}>
           <button style={{
             padding:"4px 7px", borderRadius:6, background:"var(--bg1)",
             border:"1px solid var(--border)", fontSize:14,
-          }}>{cInWish ? "♥" : "♡"}</button>
+          }}>{cInWish ? <Icon name="heart" size={14} /> : <Icon name="heartOutline" size={14} />}</button>
         </div>
         <div style={{ position:"absolute", bottom:8, left:8 }}>
           <Badge variant={r.availability === "available" ? "green" : "amber"}>{r.availability}</Badge>
@@ -649,7 +956,9 @@ function ResourceCard({ r, navigate, inCart, inWish, addToCart, toggleWish }) {
       </div>
       <div style={{ padding:14 }}>
         <div style={{ fontWeight:600, fontSize:14, marginBottom:4 }}>{r.name}</div>
-        <div style={{ color:"var(--fg2)", fontSize:12, marginBottom:8 }}>📍 {r.location} · {r.provider}</div>
+        <div style={{ color:"var(--fg2)", fontSize:12, marginBottom:8, display:"flex", alignItems:"center", gap:6 }}>
+          <Icon name="location" size={12} /> {r.location} · {r.provider}
+        </div>
         <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:12 }}>
           <span style={{ color:"var(--amber)", fontSize:13 }}>{"★".repeat(Math.floor(r.rating))}</span>
           <span style={{ fontSize:12, color:"var(--fg2)" }}>{r.rating} ({r.reviews})</span>
@@ -693,13 +1002,13 @@ function PageBrowse({ navigate, searchQ, setSearchQ, activeFilter, setActiveFilt
           display:"flex", gap:8, background:"var(--bg2)", border:"1px solid var(--border)",
           borderRadius:12, padding:"6px 6px 6px 16px", alignItems:"center", maxWidth:380, width:"100%",
         }}>
-          <span style={{ color:"var(--fg3)" }}>🔍</span>
+          <span style={{ color:"var(--fg3)" }}><Icon name="search" size={14} /></span>
           <input
             value={searchQ} onChange={e => setSearchQ(e.target.value)}
             placeholder="Arduino, sensors, motors…"
             style={{ background:"none", border:"none", flex:1, padding:"6px 0", outline:"none", boxShadow:"none" }}
           />
-          {searchQ && <button onClick={() => setSearchQ("")} style={{ fontSize:12, padding:"4px 6px", border:"1px solid var(--border)", borderRadius:6, color:"var(--fg3)" }}>✕</button>}
+          {searchQ && <button onClick={() => setSearchQ("")} style={{ fontSize:12, padding:"4px 6px", border:"1px solid var(--border)", borderRadius:6, color:"var(--fg3)" }}><Icon name="close" size={12} /></button>}
         </div>
       </div>
 
@@ -719,12 +1028,13 @@ function PageBrowse({ navigate, searchQ, setSearchQ, activeFilter, setActiveFilt
         <button onClick={() => navigate("campus-map")} style={{
           marginLeft:"auto", padding:"6px 14px", borderRadius:24,
           border:"1px solid var(--border)", fontSize:12, color:"var(--fg2)",
-        }}>📍 Map view</button>
+          display:"flex", alignItems:"center", gap:6,
+        }}><Icon name="location" size={12} /> Map view</button>
       </div>
 
       {filtered.length === 0 ? (
         <div style={{ textAlign:"center", padding:"80px 0", color:"var(--fg3)" }}>
-          <div style={{ fontSize:48, marginBottom:16 }}>🌿</div>
+          <div style={{ fontSize:48, marginBottom:16 }}><Icon name="leaf" size={40} /></div>
           <div style={{ fontSize:18, fontWeight:600, marginBottom:8, color:"var(--fg1)" }}>No items found for "{searchQ}"</div>
           <div style={{ fontSize:14, marginBottom:24 }}>Try different keywords or clear your filters</div>
           <div style={{ display:"flex", gap:12, justifyContent:"center" }}>
@@ -733,7 +1043,7 @@ function PageBrowse({ navigate, searchQ, setSearchQ, activeFilter, setActiveFilt
           </div>
         </div>
       ) : (
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))", gap:16 }}>
+        <div className="card-grid" style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))", gap:16 }}>
           {filtered.map(r => <ResourceCard key={r.id} r={r} navigate={navigate} inCart={inCart} inWish={inWish} addToCart={addToCart} toggleWish={toggleWish} />)}
         </div>
       )}
@@ -750,14 +1060,14 @@ function PageItem({ navigate, pageData, inCart, inWish, addToCart, toggleWish, s
   return (
     <div className="page-anim" style={{ padding:"40px 24px", maxWidth:1140, margin:"0 auto" }}>
       <button onClick={() => navigate("browse")} style={{ padding:"7px 14px", border:"1px solid var(--border)", borderRadius:8, marginBottom:20, color:"var(--fg2)", fontSize:13 }}>← Back to browse</button>
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:32, alignItems:"start" }}>
+      <div className="item-grid" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:32, alignItems:"start" }}>
         <div>
           <div style={{
             background:"linear-gradient(135deg,var(--bg2),var(--bg3))", borderRadius:16,
             height:280, display:"flex", alignItems:"center", justifyContent:"center",
             fontSize:80, border:"1px solid var(--border)",
-          }}>{r.emoji}</div>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:8, marginTop:8 }}>
+          }}><Icon name={r.icon} size={64} /></div>
+          <div className="thumbs-grid" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:8, marginTop:8 }}>
             {[1,2,3].map(i => (
               <div key={i} style={{
                 background:"var(--bg2)", borderRadius:8, height:64,
@@ -766,7 +1076,7 @@ function PageItem({ navigate, pageData, inCart, inWish, addToCart, toggleWish, s
               }}
                 onMouseEnter={e => e.currentTarget.style.borderColor = "var(--accent)"}
                 onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border)"}
-              >{r.emoji}</div>
+              ><Icon name={r.icon} size={24} /></div>
             ))}
           </div>
           {/* Waste impact card */}
@@ -774,7 +1084,9 @@ function PageItem({ navigate, pageData, inCart, inWish, addToCart, toggleWish, s
             marginTop:16, background:"rgba(34,197,94,.08)", border:"1px solid rgba(34,197,94,.2)",
             borderRadius:12, padding:16,
           }}>
-            <div style={{ fontFamily:"'DM Mono',monospace", fontSize:11, color:"var(--accent)", textTransform:"uppercase", letterSpacing:".08em", marginBottom:8 }}>♻ Rescue impact</div>
+            <div style={{ fontFamily:"'DM Mono',monospace", fontSize:11, color:"var(--accent)", textTransform:"uppercase", letterSpacing:".08em", marginBottom:8, display:"flex", alignItems:"center", gap:6 }}>
+              <Icon name="recycle" size={12} /> Rescue impact
+            </div>
             <div style={{ display:"flex", gap:16 }}>
               {[
                 { val:`${r.wasteKg} kg`, label:"E-waste saved" },
@@ -815,7 +1127,7 @@ function PageItem({ navigate, pageData, inCart, inWish, addToCart, toggleWish, s
             <Avatar name={r.provider} size={40} />
             <div style={{ flex:1 }}>
               <div style={{ fontWeight:600, fontSize:14 }}>{r.provider}</div>
-              <div style={{ fontSize:12, color:"var(--fg2)" }}>📍 {r.location} · Listed {r.listed}</div>
+              <div style={{ fontSize:12, color:"var(--fg2)", display:"flex", alignItems:"center", gap:6 }}><Icon name="location" size={12} /> {r.location} · Listed {r.listed}</div>
             </div>
             <button onClick={() => setModalContent((onClose, addToast) => <ContactModal onClose={onClose} addToast={addToast} provider={r.provider} />)} style={{
               padding:"6px 14px", borderRadius:8, border:"1px solid var(--border)", fontSize:13, color:"var(--fg1)",
@@ -835,11 +1147,13 @@ function PageItem({ navigate, pageData, inCart, inWish, addToCart, toggleWish, s
               flex:1, padding:12, fontSize:15, fontWeight:600, borderRadius:10,
               background: cInCart ? "var(--teal)" : "var(--accent)", color:"#fff", transition:"all .2s",
             }}>{cInCart ? "✓ In Basket — Remove" : "+ Rescue this item"}</button>
-            <button onClick={() => toggleWish(r.id)} style={{ padding:"12px 16px", fontSize:18, borderRadius:10, border:"1px solid var(--border)", transition:"all .2s" }}>
-              {cInWish ? "♥" : "♡"}
+            <button onClick={() => toggleWish(r.id)} style={{ padding:"12px 16px", borderRadius:10, border:"1px solid var(--border)", transition:"all .2s" }}>
+              {cInWish ? <Icon name="heart" size={18} /> : <Icon name="heartOutline" size={18} />}
             </button>
           </div>
-          <p style={{ fontSize:12, color:"var(--fg3)", marginTop:10, textAlign:"center" }}>💰 Cash on pickup. No platform fees.</p>
+          <p style={{ fontSize:12, color:"var(--fg3)", marginTop:10, textAlign:"center", display:"flex", alignItems:"center", gap:6, justifyContent:"center" }}>
+            <Icon name="cash" size={12} /> Cash on pickup. No platform fees.
+          </p>
         </div>
       </div>
 
@@ -859,7 +1173,7 @@ function PageItem({ navigate, pageData, inCart, inWish, addToCart, toggleWish, s
 function ContactModal({ onClose, addToast, provider }) {
   return (
     <div style={{ background:"var(--bg1)", border:"1px solid var(--border2)", borderRadius:16, padding:28, maxWidth:480, width:"100%", position:"relative" }}>
-      <button onClick={onClose} style={{ position:"absolute", top:16, right:16, padding:6, borderRadius:8, color:"var(--fg2)", fontSize:16 }}>✕</button>
+      <button onClick={onClose} style={{ position:"absolute", top:16, right:16, padding:6, borderRadius:8, color:"var(--fg2)", fontSize:16 }}><Icon name="close" size={16} /></button>
       <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:22, fontWeight:700, marginBottom:6 }}>Contact {provider}</h2>
       <p style={{ color:"var(--fg2)", fontSize:14, marginBottom:20 }}>Send a message about this component</p>
       <div style={{ marginBottom:16 }}>
@@ -867,7 +1181,7 @@ function ContactModal({ onClose, addToast, provider }) {
         <textarea rows={4} defaultValue="Hi! I'm interested in rescuing this component. Is it still available?" style={{ resize:"none" }} />
       </div>
       <div style={{ display:"flex", gap:10 }}>
-        <button onClick={() => { onClose(); addToast("Message sent! 🌿"); }} style={{ flex:1, padding:"10px", background:"var(--accent)", color:"#fff", borderRadius:8, fontWeight:600 }}>Send message</button>
+        <button onClick={() => { onClose(); addToast("Message sent!"); }} style={{ flex:1, padding:"10px", background:"var(--accent)", color:"#fff", borderRadius:8, fontWeight:600 }}>Send message</button>
         <button onClick={onClose} style={{ padding:"10px 16px", border:"1px solid var(--border)", borderRadius:8, color:"var(--fg1)" }}>Cancel</button>
       </div>
     </div>
@@ -880,7 +1194,7 @@ function PageLogin({ navigate, doLogin, setGuest, addToast }) {
     <div className="page-anim" style={{ display:"flex", alignItems:"center", justifyContent:"center", minHeight:"calc(100vh - 60px)", padding:24 }}>
       <div style={{ width:"100%", maxWidth:420 }}>
         <div onClick={() => navigate("home")} style={{ display:"flex", alignItems:"center", gap:8, marginBottom:24, cursor:"pointer" }}>
-          <div style={{ width:28, height:28, borderRadius:"50%", background:"linear-gradient(135deg,var(--accent),var(--teal))", display:"flex", alignItems:"center", justifyContent:"center", fontSize:14 }}>♻</div>
+          <div style={{ width:28, height:28, borderRadius:"50%", background:"linear-gradient(135deg,var(--accent),var(--teal))", display:"flex", alignItems:"center", justifyContent:"center", fontSize:14 }}><Icon name="recycle" size={14} /></div>
           <span style={{ fontFamily:"'Playfair Display',serif", fontSize:20, fontWeight:700 }}>GreenLoop</span>
         </div>
         <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:30, fontWeight:700, letterSpacing:"-.02em", marginBottom:6 }}>Welcome back</h1>
@@ -919,7 +1233,7 @@ function PageSignup({ navigate, doSignup, setGuest, addToast }) {
     <div className="page-anim" style={{ display:"flex", alignItems:"center", justifyContent:"center", minHeight:"calc(100vh - 60px)", padding:24 }}>
       <div style={{ width:"100%", maxWidth:420 }}>
         <div onClick={() => navigate("home")} style={{ display:"flex", alignItems:"center", gap:8, marginBottom:24, cursor:"pointer" }}>
-          <div style={{ width:28, height:28, borderRadius:"50%", background:"linear-gradient(135deg,var(--accent),var(--teal))", display:"flex", alignItems:"center", justifyContent:"center", fontSize:14 }}>♻</div>
+          <div style={{ width:28, height:28, borderRadius:"50%", background:"linear-gradient(135deg,var(--accent),var(--teal))", display:"flex", alignItems:"center", justifyContent:"center", fontSize:14 }}><Icon name="recycle" size={14} /></div>
           <span style={{ fontFamily:"'Playfair Display',serif", fontSize:20, fontWeight:700 }}>GreenLoop</span>
         </div>
         <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:30, fontWeight:700, letterSpacing:"-.02em", marginBottom:6 }}>Join GreenLoop</h1>
@@ -973,18 +1287,18 @@ function PageSignup({ navigate, doSignup, setGuest, addToast }) {
 function PageDashboard({ navigate, user, guest, dashPage, setDashPage, cart, wishlist, doLogout, addToast, setModalContent }) {
   const name = user?.name || "Guest";
   const items = [
-    { id:"overview",     icon:"⊞", label:"Overview" },
-    { id:"reservations", icon:"📦", label:"Reservations", badge:2 },
-    { id:"listings",     icon:"🏷️",  label:"My Listings" },
-    { id:"messages",     icon:"💬", label:"Messages", badge:3 },
-    { id:"analytics",    icon:"📊", label:"Analytics" },
-    { id:"wishlist2",    icon:"♥",  label:"Wishlist", badge: wishlist.length || null },
+    { id:"overview",     icon:"grid", label:"Overview" },
+    { id:"reservations", icon:"package", label:"Reservations", badge:2 },
+    { id:"listings",     icon:"tag",  label:"My Listings" },
+    { id:"messages",     icon:"message", label:"Messages", badge:3 },
+    { id:"analytics",    icon:"chart", label:"Analytics" },
+    { id:"wishlist2",    icon:"heart",  label:"Wishlist", badge: wishlist.length || null },
   ];
 
   return (
-    <div className="page-anim" style={{ display:"grid", gridTemplateColumns:"224px 1fr", minHeight:"calc(100vh - 60px)" }}>
+    <div className="page-anim dashboard-layout" style={{ display:"grid", gridTemplateColumns:"224px 1fr", minHeight:"calc(100vh - 60px)" }}>
       {/* Sidebar */}
-      <div style={{ background:"var(--bg1)", borderRight:"1px solid var(--border)", padding:"16px 0", position:"sticky", top:60, height:"calc(100vh - 60px)", overflowY:"auto" }}>
+      <div className="dashboard-sidebar" style={{ background:"var(--bg1)", borderRight:"1px solid var(--border)", padding:"16px 0", position:"sticky", top:60, height:"calc(100vh - 60px)", overflowY:"auto" }}>
         <div style={{ padding:"8px 16px 16px" }}>
           <div style={{ display:"flex", alignItems:"center", gap:10, padding:8, background:"var(--bg2)", borderRadius:8 }}>
             <Avatar name={name} size={36} />
@@ -1003,15 +1317,15 @@ function PageDashboard({ navigate, user, guest, dashPage, setDashPage, cart, wis
             background: dashPage === s.id ? "var(--bg2)" : "transparent",
             transition:"all .2s", textAlign:"left",
           }}>
-            <span>{s.icon}</span><span>{s.label}</span>
+            <span><Icon name={s.icon} size={14} /></span><span>{s.label}</span>
             {s.badge ? <span style={{ marginLeft:"auto", fontSize:10, background:"var(--accent)", color:"#fff", padding:"1px 6px", borderRadius:4 }}>{s.badge}</span> : null}
           </button>
         ))}
         <div style={{ padding:"8px 16px", fontSize:11, fontFamily:"'DM Mono',monospace", color:"var(--fg3)", letterSpacing:".08em", textTransform:"uppercase", marginTop:8 }}>Account</div>
-        {[["➕","List an Item","list-item"],["🌿","Impact","impact"],["⚙️","Settings","settings"]].map(([icon, label, path]) => (
-          <button key={path} onClick={() => navigate(path)} style={{ display:"flex", alignItems:"center", gap:10, padding:"9px 16px", width:"100%", color:"var(--fg2)", fontSize:13, margin:"1px 8px", borderRadius:8, background:"transparent", textAlign:"left" }}>{icon} {label}</button>
+        {[["plus","List an Item","list-item"],["leaf","Impact","impact"],["cog","Settings","settings"]].map(([icon, label, path]) => (
+          <button key={path} onClick={() => navigate(path)} style={{ display:"flex", alignItems:"center", gap:10, padding:"9px 16px", width:"100%", color:"var(--fg2)", fontSize:13, margin:"1px 8px", borderRadius:8, background:"transparent", textAlign:"left" }}><Icon name={icon} size={14} /> {label}</button>
         ))}
-        <button onClick={doLogout} style={{ display:"flex", alignItems:"center", gap:10, padding:"9px 16px", width:"100%", color:"var(--fg2)", fontSize:13, margin:"1px 8px", borderRadius:8, textAlign:"left" }}>🚪 Sign out</button>
+        <button onClick={doLogout} style={{ display:"flex", alignItems:"center", gap:10, padding:"9px 16px", width:"100%", color:"var(--fg2)", fontSize:13, margin:"1px 8px", borderRadius:8, textAlign:"left" }}><Icon name="door" size={14} /> Sign out</button>
       </div>
 
       {/* Content */}
@@ -1025,9 +1339,11 @@ function PageDashboard({ navigate, user, guest, dashPage, setDashPage, cart, wis
 function DashContent({ id, name, navigate, wishlist, addToast, setModalContent }) {
   if (id === "overview") return (
     <div>
-      <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:26, fontWeight:700, marginBottom:4 }}>Good morning, {name.split(" ")[0]} 🌿</h1>
+      <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:26, fontWeight:700, marginBottom:4, display:"flex", alignItems:"center", gap:8 }}>
+        Good morning, {name.split(" ")[0]} <Icon name="leaf" size={18} />
+      </h1>
       <p style={{ color:"var(--fg2)", fontSize:14, marginBottom:28 }}>Your sustainability dashboard for this semester.</p>
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:24 }}>
+      <div className="stats-grid" style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:24 }}>
         {[
           { l:"Components rescued", v:"12", u:"units",         c:"green" },
           { l:"EGP saved",         v:"1,240", u:"this semester", c:"accent" },
@@ -1041,17 +1357,17 @@ function DashContent({ id, name, navigate, wishlist, addToast, setModalContent }
           </div>
         ))}
       </div>
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16, marginBottom:16 }}>
+      <div className="impact-grid-2" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16, marginBottom:16 }}>
         <div style={{ background:"var(--card)", border:"1px solid var(--border)", borderRadius:12, padding:20 }}>
           <div style={{ fontWeight:600, marginBottom:16, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
             <span>Active Reservations</span><Badge variant="green">2 active</Badge>
           </div>
           {[
-            { name:"Arduino Uno R3 Kit", status:"Confirmed", price:"120 EGP", emoji:"🔌", date:"May 30" },
-            { name:"HC-SR04 Sensors x5", status:"Pending",   price:"75 EGP",  emoji:"📡", date:"Jun 1" },
+            { name:"Arduino Uno R3 Kit", status:"Confirmed", price:"120 EGP", icon:"plug", date:"May 30" },
+            { name:"HC-SR04 Sensors x5", status:"Pending",   price:"75 EGP",  icon:"antenna", date:"Jun 1" },
           ].map(r => (
             <div key={r.name} style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 0", borderBottom:"1px solid var(--border)" }}>
-              <span style={{ fontSize:22 }}>{r.emoji}</span>
+              <span style={{ fontSize:22 }}><Icon name={r.icon} size={20} /></span>
               <div style={{ flex:1 }}>
                 <div style={{ fontSize:13, fontWeight:600 }}>{r.name}</div>
                 <div style={{ fontSize:12, color:"var(--fg2)" }}>{r.price} · Pickup {r.date}</div>
@@ -1086,13 +1402,13 @@ function DashContent({ id, name, navigate, wishlist, addToast, setModalContent }
       <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:22, fontWeight:700, marginBottom:4 }}>My Reservations</h2>
       <p style={{ color:"var(--fg2)", fontSize:14, marginBottom:20 }}>Track and manage your active rescues</p>
       {[
-        { name:"Arduino Uno R3 Kit", provider:"Omar K.",  price:120, status:"Confirmed", date:"May 30, 2026", emoji:"🔌", location:"AUC New Cairo — Main Gate" },
-        { name:"HC-SR04 Sensors x5", provider:"Nour H.",  price:75,  status:"Pending",   date:"Jun 1, 2026",  emoji:"📡", location:"AUC New Cairo — Engineering" },
-        { name:"ESP32 Dev Board x2", provider:"Layla F.", price:200, status:"Completed",  date:"May 15, 2026", emoji:"📶", location:"AUC New Cairo" },
+        { name:"Arduino Uno R3 Kit", provider:"Omar K.",  price:120, status:"Confirmed", date:"May 30, 2026", icon:"plug", location:"AUC New Cairo — Main Gate" },
+        { name:"HC-SR04 Sensors x5", provider:"Nour H.",  price:75,  status:"Pending",   date:"Jun 1, 2026",  icon:"antenna", location:"AUC New Cairo — Engineering" },
+        { name:"ESP32 Dev Board x2", provider:"Layla F.", price:200, status:"Completed",  date:"May 15, 2026", icon:"wifi", location:"AUC New Cairo" },
       ].map(r => (
         <div key={r.name} style={{ background:"var(--card)", border:"1px solid var(--border)", borderRadius:12, padding:20, marginBottom:12 }}>
           <div style={{ display:"flex", alignItems:"center", gap:16 }}>
-            <span style={{ fontSize:36 }}>{r.emoji}</span>
+            <span style={{ fontSize:36 }}><Icon name={r.icon} size={28} /></span>
             <div style={{ flex:1 }}>
               <div style={{ fontWeight:600, marginBottom:2 }}>{r.name}</div>
               <div style={{ fontSize:12, color:"var(--fg2)" }}>From {r.provider} · {r.location}</div>
@@ -1105,8 +1421,8 @@ function DashContent({ id, name, navigate, wishlist, addToast, setModalContent }
           </div>
           {r.status !== "Completed" && (
             <div style={{ display:"flex", gap:8, marginTop:12, borderTop:"1px solid var(--border)", paddingTop:12 }}>
-              <button onClick={() => addToast("Message sent!")} style={{ padding:"5px 12px", border:"1px solid var(--border)", borderRadius:8, fontSize:12, color:"var(--fg1)" }}>💬 Message</button>
-              <button onClick={() => addToast("Reschedule requested", "info")} style={{ padding:"5px 12px", border:"1px solid var(--border)", borderRadius:8, fontSize:12, color:"var(--fg1)" }}>📅 Reschedule</button>
+              <button onClick={() => addToast("Message sent!")} style={{ padding:"5px 12px", border:"1px solid var(--border)", borderRadius:8, fontSize:12, color:"var(--fg1)", display:"flex", alignItems:"center", gap:6 }}><Icon name="message" size={12} /> Message</button>
+              <button onClick={() => addToast("Reschedule requested", "info")} style={{ padding:"5px 12px", border:"1px solid var(--border)", borderRadius:8, fontSize:12, color:"var(--fg1)", display:"flex", alignItems:"center", gap:6 }}><Icon name="calendar" size={12} /> Reschedule</button>
               <button onClick={() => addToast("Reservation cancelled", "error")} style={{ marginLeft:"auto", padding:"5px 12px", background:"rgba(239,68,68,.1)", color:"var(--red)", border:"1px solid rgba(239,68,68,.2)", borderRadius:8, fontSize:12 }}>Cancel</button>
             </div>
           )}
@@ -1124,7 +1440,7 @@ function DashContent({ id, name, navigate, wishlist, addToast, setModalContent }
         </div>
         <button onClick={() => navigate("list-item")} style={{ padding:"8px 16px", background:"var(--accent)", color:"#fff", borderRadius:8, fontWeight:600, fontSize:13 }}>+ New Listing</button>
       </div>
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12, marginBottom:20 }}>
+      <div className="stats-grid-3" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12, marginBottom:20 }}>
         {[{ l:"Active listings", v:"4", c:"green" }, { l:"Total views", v:"428", c:"blue" }, { l:"EGP earned", v:"840", c:"accent" }].map(s => (
           <div key={s.l} style={{ background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:12, padding:16, textAlign:"center" }}>
             <div style={{ fontSize:22, fontWeight:700, fontFamily:"'Playfair Display',serif", color:`var(--${s.c})`, marginBottom:4 }}>{s.v}</div>
@@ -1135,7 +1451,7 @@ function DashContent({ id, name, navigate, wishlist, addToast, setModalContent }
       {WASTE_ITEMS.slice(0, 4).map(r => (
         <div key={r.id} style={{ background:"var(--card)", border:"1px solid var(--border)", borderRadius:12, padding:20, marginBottom:12 }}>
           <div style={{ display:"flex", alignItems:"center", gap:16 }}>
-            <span style={{ fontSize:32 }}>{r.emoji}</span>
+            <span style={{ fontSize:32 }}><Icon name={r.icon} size={26} /></span>
             <div style={{ flex:1 }}>
               <div style={{ fontWeight:600, marginBottom:2 }}>{r.name}</div>
               <div style={{ fontSize:12, color:"var(--fg2)" }}>{r.price} EGP · {r.location} · Listed {r.listed}</div>
@@ -1160,7 +1476,7 @@ function DashContent({ id, name, navigate, wishlist, addToast, setModalContent }
 
   return (
     <div style={{ textAlign:"center", padding:"60px 0", color:"var(--fg3)" }}>
-      <div style={{ fontSize:40, marginBottom:12 }}>🌿</div>
+      <div style={{ fontSize:40, marginBottom:12 }}><Icon name="leaf" size={36} /></div>
       <div style={{ fontSize:16, fontWeight:600, color:"var(--fg2)" }}>Section coming soon</div>
     </div>
   );
@@ -1176,7 +1492,7 @@ function PageCart({ navigate, cart, setCart, addToast, setNotifications, user })
       <p style={{ color:"var(--fg2)", fontSize:14, marginBottom:24 }}>{cart.length} {cart.length === 1 ? "item" : "items"} · {totalWaste.toFixed(2)} kg of e-waste being rescued</p>
       {cart.length === 0 ? (
         <div style={{ textAlign:"center", padding:"60px 0", color:"var(--fg3)" }}>
-          <div style={{ fontSize:48, marginBottom:16 }}>♻️</div>
+          <div style={{ fontSize:48, marginBottom:16 }}><Icon name="recycle" size={40} /></div>
           <div style={{ fontSize:18, fontWeight:600, color:"var(--fg1)", marginBottom:8 }}>Your basket is empty</div>
           <button onClick={() => navigate("browse")} style={{ padding:"10px 20px", background:"var(--accent)", color:"#fff", borderRadius:8, marginTop:12 }}>Browse rescued items</button>
         </div>
@@ -1184,11 +1500,11 @@ function PageCart({ navigate, cart, setCart, addToast, setNotifications, user })
         <>
           {cart.map(r => (
             <div key={r.id} style={{ display:"flex", gap:14, padding:"16px 0", borderBottom:"1px solid var(--border)" }}>
-              <div style={{ width:52, height:52, borderRadius:8, background:"var(--bg2)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:22, flexShrink:0 }}>{r.emoji}</div>
+              <div style={{ width:52, height:52, borderRadius:8, background:"var(--bg2)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:22, flexShrink:0 }}><Icon name={r.icon} size={22} /></div>
               <div style={{ flex:1 }}>
                 <div style={{ fontWeight:600 }}>{r.name}</div>
                 <div style={{ fontSize:12, color:"var(--fg2)" }}>{r.provider} · {r.location}</div>
-                <div style={{ fontSize:11, color:"var(--accent)", marginTop:4 }}>♻ Saves {r.wasteKg} kg e-waste</div>
+                <div style={{ fontSize:11, color:"var(--accent)", marginTop:4, display:"flex", alignItems:"center", gap:6 }}><Icon name="recycle" size={12} /> Saves {r.wasteKg} kg e-waste</div>
               </div>
               <div style={{ textAlign:"right" }}>
                 <div style={{ fontFamily:"'DM Mono',monospace", fontSize:16, fontWeight:600, color:"var(--accent2)", marginBottom:6 }}>{r.price} EGP</div>
@@ -1202,10 +1518,10 @@ function PageCart({ navigate, cart, setCart, addToast, setNotifications, user })
               <span style={{ fontFamily:"'DM Mono',monospace", fontSize:20, fontWeight:700, color:"var(--accent2)" }}>{total} EGP</span>
             </div>
             <div style={{ display:"flex", justifyContent:"space-between", fontSize:13, color:"var(--fg2)", marginBottom:4 }}>
-              <span>🌍 E-waste rescued</span><span style={{ color:"var(--accent)" }}>{totalWaste.toFixed(2)} kg</span>
+              <span style={{ display:"flex", alignItems:"center", gap:6 }}><Icon name="globe" size={12} /> E-waste rescued</span><span style={{ color:"var(--accent)" }}>{totalWaste.toFixed(2)} kg</span>
             </div>
             <div style={{ display:"flex", justifyContent:"space-between", fontSize:13, color:"var(--fg2)", marginBottom:16 }}>
-              <span>🌱 CO₂ avoided</span><span style={{ color:"var(--teal)" }}>{(totalWaste * 2.3).toFixed(2)} kg</span>
+              <span style={{ display:"flex", alignItems:"center", gap:6 }}><Icon name="seedling" size={12} /> CO₂ avoided</span><span style={{ color:"var(--teal)" }}>{(totalWaste * 2.3).toFixed(2)} kg</span>
             </div>
             {user ? (
               <button onClick={() => navigate("checkout")} style={{ width:"100%", padding:12, background:"var(--accent)", color:"#fff", borderRadius:8, fontWeight:600, fontSize:15 }}>Confirm reservation →</button>
@@ -1227,12 +1543,12 @@ function PageWishlist({ navigate, wishlist, toggleWish, addToCart, inCart }) {
       <p style={{ color:"var(--fg2)", fontSize:14, marginBottom:24 }}>{wishlist.length} saved items</p>
       {wishlist.length === 0 ? (
         <div style={{ textAlign:"center", padding:"60px 0", color:"var(--fg3)" }}>
-          <div style={{ fontSize:48, marginBottom:16 }}>🌿</div>
+          <div style={{ fontSize:48, marginBottom:16 }}><Icon name="leaf" size={40} /></div>
           <div style={{ fontSize:18, fontWeight:600, color:"var(--fg1)", marginBottom:8 }}>Your wishlist is empty</div>
           <button onClick={() => navigate("browse")} style={{ padding:"10px 20px", background:"var(--accent)", color:"#fff", borderRadius:8, marginTop:12 }}>Browse rescued items</button>
         </div>
       ) : (
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))", gap:16 }}>
+        <div className="card-grid" style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))", gap:16 }}>
           {wishlist.map(r => <ResourceCard key={r.id} r={r} navigate={navigate} inCart={inCart} inWish={() => true} addToCart={addToCart} toggleWish={toggleWish} />)}
         </div>
       )}
@@ -1248,7 +1564,7 @@ function PageCheckout({ navigate, cart, setCart, addToast, setNotifications }) {
       <p style={{ color:"var(--fg2)", fontSize:14, marginBottom:28 }}>Review your items and confirm pickup details</p>
       {cart.map(r => (
         <div key={r.id} style={{ display:"flex", gap:12, padding:"12px 0", borderBottom:"1px solid var(--border)" }}>
-          <span style={{ fontSize:24 }}>{r.emoji}</span>
+          <span style={{ fontSize:24 }}><Icon name={r.icon} size={20} /></span>
           <div style={{ flex:1 }}>
             <div style={{ fontWeight:600, fontSize:13 }}>{r.name}</div>
             <div style={{ fontSize:12, color:"var(--fg2)" }}>{r.provider} · {r.location}</div>
@@ -1262,11 +1578,11 @@ function PageCheckout({ navigate, cart, setCart, addToast, setNotifications }) {
       </div>
       <button onClick={() => {
         setCart([]);
-        addToast("Reservation confirmed! Check your messages 🎉");
+        addToast("Reservation confirmed! Check your messages");
         setNotifications(n => [{ id: Date.now(), title:"Your reservation is confirmed — check pickup details", time:"Just now", read:false }, ...n]);
         navigate("dashboard");
-      }} style={{ width:"100%", padding:14, background:"var(--accent)", color:"#fff", borderRadius:10, fontWeight:700, fontSize:16, marginTop:20 }}>
-        Confirm reservation ♻
+      }} style={{ width:"100%", padding:14, background:"var(--accent)", color:"#fff", borderRadius:10, fontWeight:700, fontSize:16, marginTop:20, display:"flex", alignItems:"center", justifyContent:"center", gap:8 }}>
+        <Icon name="recycle" size={16} /> Confirm reservation
       </button>
     </div>
   );
@@ -1282,18 +1598,18 @@ function PageImpact({ navigate }) {
         <p style={{ color:"var(--fg2)", fontSize:16, maxWidth:540, margin:"0 auto" }}>Every component rescued is a victory for the environment. Here's what our community has achieved together.</p>
       </div>
 
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:16, marginBottom:40 }}>
+      <div className="impact-grid" style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:16, marginBottom:40 }}>
         {[
-          { icon:"♻️", val:"92 kg",  label:"E-waste diverted",  sub:"from Cairo landfills" },
-          { icon:"🌿", val:"211 kg", label:"CO₂ avoided",       sub:"equivalent" },
-          { icon:"💰", val:"45k EGP",label:"Student savings",   sub:"across all campuses" },
-          { icon:"🏫", val:"1,240+", label:"Components rescued", sub:"and counting" },
+          { icon:"recycle", val:"92 kg",  label:"E-waste diverted",  sub:"from Cairo landfills" },
+          { icon:"leaf", val:"211 kg", label:"CO₂ avoided",       sub:"equivalent" },
+          { icon:"cash", val:"45k EGP",label:"Student savings",   sub:"across all campuses" },
+          { icon:"campus", val:"1,240+", label:"Components rescued", sub:"and counting" },
         ].map(s => (
           <div key={s.label} style={{
             background:"var(--card)", border:"1px solid var(--border)", borderRadius:16, padding:24, textAlign:"center",
             background:"linear-gradient(135deg,rgba(34,197,94,.06),rgba(20,184,166,.04))",
           }}>
-            <div style={{ fontSize:36, marginBottom:12 }}>{s.icon}</div>
+            <div style={{ fontSize:36, marginBottom:12 }}><Icon name={s.icon} size={32} /></div>
             <div style={{ fontFamily:"'Playfair Display',serif", fontSize:28, fontWeight:700, color:"var(--accent)", marginBottom:4 }}>{s.val}</div>
             <div style={{ fontWeight:600, fontSize:14, marginBottom:4 }}>{s.label}</div>
             <div style={{ fontSize:12, color:"var(--fg3)" }}>{s.sub}</div>
@@ -1301,7 +1617,7 @@ function PageImpact({ navigate }) {
         ))}
       </div>
 
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:24, marginBottom:40 }}>
+      <div className="impact-grid-2" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:24, marginBottom:40 }}>
         <div style={{ background:"var(--card)", border:"1px solid var(--border)", borderRadius:16, padding:28 }}>
           <h3 style={{ fontWeight:700, marginBottom:20 }}>Waste diverted by category</h3>
           {[
@@ -1339,7 +1655,7 @@ function PageImpact({ navigate }) {
       </div>
 
       <div style={{ textAlign:"center", background:"linear-gradient(135deg,rgba(34,197,94,.1),rgba(20,184,166,.07))", border:"1px solid rgba(34,197,94,.2)", borderRadius:16, padding:40 }}>
-        <div style={{ fontSize:40, marginBottom:16 }}>🌍</div>
+        <div style={{ fontSize:40, marginBottom:16 }}><Icon name="globe" size={34} /></div>
         <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:24, fontWeight:700, marginBottom:12 }}>Help us reach 200 kg diverted this year</h2>
         <p style={{ color:"var(--fg2)", fontSize:15, maxWidth:480, margin:"0 auto 24px", lineHeight:1.7 }}>Every component you list or rescue brings our community closer to the goal. Together, we make Egyptian campuses circular.</p>
         <div style={{ display:"flex", gap:12, justifyContent:"center" }}>
@@ -1357,7 +1673,7 @@ function PageCampusMap({ navigate, activeMapPin, setActiveMapPin }) {
     <div className="page-anim" style={{ padding:"40px 24px", maxWidth:1140, margin:"0 auto" }}>
       <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:30, fontWeight:700, marginBottom:4 }}>Campus map</h1>
       <p style={{ color:"var(--fg2)", fontSize:14, marginBottom:24 }}>Find rescued components near your campus</p>
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 320px", gap:16, alignItems:"start" }}>
+      <div className="map-grid" style={{ display:"grid", gridTemplateColumns:"1fr 320px", gap:16, alignItems:"start" }}>
         <div style={{ position:"relative", background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:16, overflow:"hidden", height:460 }}>
           {/* Grid */}
           <div style={{ position:"absolute", inset:0, backgroundImage:"linear-gradient(rgba(34,197,94,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(34,197,94,.04) 1px,transparent 1px)", backgroundSize:"40px 40px" }} />
@@ -1372,7 +1688,7 @@ function PageCampusMap({ navigate, activeMapPin, setActiveMapPin }) {
               cursor:"pointer", transform:"translate(-50%,-50%)", transition:"all .2s",
               top: c.y, left: c.x, zIndex: activeMapPin === c.id ? 10 : 2,
             }}>
-              🏫
+              <Icon name="campus" size={16} />
               {activeMapPin === c.id && (
                 <div style={{
                   position:"absolute", bottom:"110%", left:"50%", transform:"translateX(-50%)",
@@ -1415,12 +1731,12 @@ function PageLeaderboard({ navigate }) {
         <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:36, fontWeight:700, letterSpacing:"-.02em", marginBottom:8 }}>Rescue Champions</h1>
         <p style={{ color:"var(--fg2)", fontSize:14 }}>Students making the biggest environmental impact this semester</p>
       </div>
-      <div style={{ background:"var(--card)", border:"1px solid var(--border)", borderRadius:16, overflow:"hidden" }}>
-        <div style={{ padding:"12px 20px", borderBottom:"1px solid var(--border)", display:"grid", gridTemplateColumns:"48px 1fr 100px 100px 80px", gap:16, fontSize:11, fontFamily:"'DM Mono',monospace", color:"var(--fg3)", textTransform:"uppercase", letterSpacing:".06em" }}>
+      <div className="leaderboard-table" style={{ background:"var(--card)", border:"1px solid var(--border)", borderRadius:16, overflow:"hidden" }}>
+        <div className="leaderboard-head" style={{ padding:"12px 20px", borderBottom:"1px solid var(--border)", display:"grid", gridTemplateColumns:"48px 1fr 100px 100px 80px", gap:16, fontSize:11, fontFamily:"'DM Mono',monospace", color:"var(--fg3)", textTransform:"uppercase", letterSpacing:".06em" }}>
           <span>Rank</span><span>Student</span><span>E-waste (kg)</span><span>Items</span><span>CO₂ (kg)</span>
         </div>
         {LEADERBOARD.map(row => (
-          <div key={row.rank} className="hover-row" style={{
+          <div key={row.rank} className="hover-row leaderboard-row" style={{
             padding:"14px 20px", borderBottom:"1px solid var(--border)",
             display:"grid", gridTemplateColumns:"48px 1fr 100px 100px 80px", gap:16,
             alignItems:"center", transition:"all .2s",
@@ -1428,7 +1744,8 @@ function PageLeaderboard({ navigate }) {
             <span style={{
               fontFamily:"'DM Mono',monospace", fontSize:14, fontWeight:700, textAlign:"center",
               color: row.rank === 1 ? "var(--amber)" : row.rank === 2 ? "var(--fg2)" : row.rank === 3 ? "#cd7f32" : "var(--fg3)",
-            }}>{row.rank <= 3 ? ["🥇","🥈","🥉"][row.rank-1] : `#${row.rank}`}</span>
+              display:"inline-flex", alignItems:"center", gap:6, justifyContent:"center",
+            }}>{row.rank <= 3 ? <><Icon name="trophy" size={14} />{row.rank}</> : `#${row.rank}`}</span>
             <div style={{ display:"flex", alignItems:"center", gap:10 }}>
               <Avatar name={row.name} size={30} />
               <div>
@@ -1511,17 +1828,17 @@ function PageListItem({ navigate, listStep, setListStep, addToast, setNotificati
             </div>
           ))}
           <div style={{ background:"rgba(34,197,94,.08)", border:"1px solid rgba(34,197,94,.2)", borderRadius:10, padding:14, marginBottom:20, fontSize:13, color:"var(--fg2)" }}>
-            🌍 By listing this, you're preventing e-waste from reaching Cairo's landfills. Thank you for being part of the circular economy.
+            <span style={{ display:"inline-flex", alignItems:"center", gap:8 }}><Icon name="globe" size={14} /> By listing this, you're preventing e-waste from reaching Cairo's landfills. Thank you for being part of the circular economy.</span>
           </div>
           <div style={{ display:"flex", gap:10 }}>
             <button onClick={() => setListStep(1)} style={{ padding:"10px 16px", border:"1px solid var(--border)", borderRadius:8, color:"var(--fg1)", fontSize:13 }}>← Back</button>
             <button onClick={() => {
               setListStep(1);
-              addToast("Listing published! Your component is now visible 🌿");
+              addToast("Listing published! Your component is now visible");
               setNotifications(n => [{ id: Date.now(), title:"Your listing is live — students can now find and rescue it", time:"Just now", read:false }, ...n]);
               navigate("dashboard");
             }} style={{ flex:1, padding:"10px", background:"var(--accent)", color:"#fff", borderRadius:8, fontWeight:600, fontSize:15 }}>
-              Publish listing 🌿
+              Publish listing
             </button>
           </div>
         </div>
@@ -1575,7 +1892,7 @@ function PageProfile({ navigate, user, doLogout }) {
           <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:26, fontWeight:700, marginBottom:4 }}>{user.name}</h1>
           <p style={{ color:"var(--fg2)", fontSize:14 }}>{user.email}</p>
           <div style={{ marginTop:8 }}>
-            <Badge variant="green">🌿 Eco Champion</Badge>
+            <Badge variant="green"><span style={{ display:"inline-flex", alignItems:"center", gap:6 }}><Icon name="leaf" size={12} /> Eco Champion</span></Badge>
           </div>
         </div>
       </div>
