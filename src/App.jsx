@@ -398,7 +398,7 @@ function ProgressBar({ pct, color = "var(--accent)", height = 4 }) {
 
 function Toast({ toasts }) {
   return (
-    <div style={{
+    <div className="toast-container" style={{
       position: "fixed", bottom: 24, right: 24, zIndex: 400,
       display: "flex", flexDirection: "column", gap: 8, pointerEvents: "none",
     }}>
@@ -554,6 +554,7 @@ export default function GreenLoop() {
         @keyframes toastIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:none; } }
         @keyframes pulse { 0%,100% { opacity:.6 } 50% { opacity:1 } }
         @keyframes leafFloat { 0%,100% { transform:translateY(0) rotate(0deg) } 50% { transform:translateY(-12px) rotate(8deg) } }
+        @keyframes mobileMenuIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:none; } }
         .page-anim { animation: fadeIn .28s ease; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg1); }
@@ -563,6 +564,12 @@ export default function GreenLoop() {
         .hover-scale:hover { transform: scale(1.05); }
         input::placeholder { color: var(--fg3); }
         .leaderboard-table { width: 100%; }
+        .nav-desktop-links { display: flex; align-items: center; gap: 4px; margin-left: 16px; }
+        .nav-desktop-actions { display: flex; align-items: center; gap: 6px; }
+        .nav-mobile-toggle { display: none; }
+        .nav-mobile-menu { display: none; }
+        .hero-h1 { font-size: 56px; }
+        .hero-stats { gap: 48px; }
         @media (max-width: 960px) {
           .footer-grid { grid-template-columns: 1fr 1fr !important; }
           .steps-grid { grid-template-columns: 1fr !important; }
@@ -577,14 +584,38 @@ export default function GreenLoop() {
           .map-grid { grid-template-columns: 1fr !important; }
           .leaderboard-head, .leaderboard-row { grid-template-columns: 40px 1fr 90px 70px 70px !important; }
         }
+        @media (max-width: 768px) {
+          .nav-desktop-links { display: none !important; }
+          .nav-desktop-actions { display: none !important; }
+          .nav-mobile-toggle { display: flex !important; align-items: center; justify-content: center; padding: 8px; border-radius: 8px; border: 1px solid var(--border); color: var(--fg2); margin-left: auto; }
+          .nav-mobile-menu { display: block !important; position: absolute; top: 60px; left: 0; right: 0; background: var(--bg1); border-bottom: 1px solid var(--border); z-index: 99; animation: mobileMenuIn .2s ease; box-shadow: var(--shadowLg); }
+          .hero-h1 { font-size: 36px !important; letter-spacing: -0.02em !important; }
+          .hero-stats { gap: 24px !important; flex-wrap: wrap; justify-content: center; }
+          .hero-stats > div { min-width: 120px; }
+          .hero-buttons { flex-direction: column !important; align-items: stretch !important; }
+          .hero-buttons button { width: 100%; }
+          .footer-grid { grid-template-columns: 1fr !important; }
+          .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .dashboard-sidebar { display: none !important; }
+          .dashboard-layout { grid-template-columns: 1fr !important; }
+        }
         @media (max-width: 640px) {
           .footer-grid { grid-template-columns: 1fr !important; }
           .stats-grid { grid-template-columns: 1fr !important; }
           .stats-grid-3 { grid-template-columns: 1fr !important; }
           .impact-grid { grid-template-columns: 1fr !important; }
-          .card-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important; }
+          .card-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important; }
           .leaderboard-table { overflow-x: auto; }
           .leaderboard-head, .leaderboard-row { min-width: 520px; }
+          .page-pad { padding: 24px 16px !important; }
+          .item-price-row { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+          .item-price-row button { width: 100%; }
+          .checkout-item { flex-wrap: wrap; }
+          .toast-container { left: 16px !important; right: 16px !important; bottom: 16px !important; }
+          .notif-panel { width: calc(100vw - 32px) !important; right: -8px !important; }
+          .dash-stats { grid-template-columns: 1fr 1fr !important; }
+          .dash-impact { grid-template-columns: 1fr !important; }
+          .profile-stats { grid-template-columns: 1fr 1fr 1fr !important; }
         }
       `}</style>
 
@@ -615,8 +646,18 @@ export default function GreenLoop() {
   );
 }
 
+// ─── Hamburger Icon ────────────────────────────────────────────────────────────
+function HamburgerIcon({ open }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+      {open ? (<><path d="M4 4l12 12M16 4L4 16" /></>) : (<><path d="M3 6h14M3 10h14M3 14h14" /></>)}
+    </svg>
+  );
+}
+
 // ─── Navbar ───────────────────────────────────────────────────────────────────
 function Navbar({ navigate, page, user, guest, theme, setTheme, cart, wishlist, notifPanel, setNotifPanel, notifications, markAllRead, unread, doLogout }) {
+  const [mobileOpen, setMobileOpen] = useState(false);
   const links = [
     { id:"browse", label:"Browse" },
     { id:"impact", label:"Impact" },
@@ -624,110 +665,176 @@ function Navbar({ navigate, page, user, guest, theme, setTheme, cart, wishlist, 
     { id:"leaderboard", label:"Leaderboard" },
     ...(user || guest ? [{ id:"dashboard", label:"Dashboard" }] : []),
   ];
+  const go = (id) => { navigate(id); setMobileOpen(false); };
+
   return (
     <nav style={{
       position:"sticky", top:0, zIndex:100,
-      background: theme === "dark" ? "rgba(3,15,8,.9)" : "rgba(240,250,244,.93)",
+      background: theme === "dark" ? "rgba(3,15,8,.95)" : "rgba(240,250,244,.97)",
       backdropFilter:"blur(20px)", borderBottom:"1px solid var(--border)",
-      padding:"0 24px", height:60, display:"flex", alignItems:"center", gap:12,
     }}>
-      {/* Logo */}
-      <div onClick={() => navigate("home")} style={{ display:"flex",alignItems:"center",gap:8,cursor:"pointer",flexShrink:0 }}>
-        <div style={{
-          width:32, height:32, borderRadius:"50%",
-          background:"linear-gradient(135deg,var(--accent),var(--teal))",
-          display:"flex", alignItems:"center", justifyContent:"center",
-          fontSize:16,
-        }}><Icon name="recycle" size={16} /></div>
-        <span style={{ fontFamily:"'Playfair Display',serif", fontSize:20, fontWeight:700, letterSpacing:"-.02em", color:"var(--fg0)" }}>
-          GreenLoop
-        </span>
-        <span style={{ fontSize:10, fontFamily:"'DM Mono',monospace", color:"var(--accent)", background:"rgba(34,197,94,.1)", padding:"2px 6px", borderRadius:4 }}>
-          beta
-        </span>
-      </div>
+      {/* Main bar */}
+      <div style={{ padding:"0 16px", height:60, display:"flex", alignItems:"center", gap:8 }}>
+        {/* Logo */}
+        <div onClick={() => go("home")} style={{ display:"flex",alignItems:"center",gap:8,cursor:"pointer",flexShrink:0 }}>
+          <div style={{
+            width:32, height:32, borderRadius:"50%",
+            background:"linear-gradient(135deg,var(--accent),var(--teal))",
+            display:"flex", alignItems:"center", justifyContent:"center",
+          }}><Icon name="recycle" size={16} /></div>
+          <span style={{ fontFamily:"'Playfair Display',serif", fontSize:20, fontWeight:700, letterSpacing:"-.02em", color:"var(--fg0)" }}>
+            GreenLoop
+          </span>
+          <span style={{ fontSize:10, fontFamily:"'DM Mono',monospace", color:"var(--accent)", background:"rgba(34,197,94,.1)", padding:"2px 6px", borderRadius:4 }}>
+            beta
+          </span>
+        </div>
 
-      {/* Links */}
-      <div style={{ display:"flex", alignItems:"center", gap:4, marginLeft:16 }}>
-        {links.map(l => (
-          <button key={l.id} onClick={() => navigate(l.id)} style={{
-            padding:"6px 11px", borderRadius:8, fontSize:13, fontWeight:500,
-            color: page === l.id ? "var(--fg0)" : "var(--fg2)",
-            background: page === l.id ? "var(--bg2)" : "transparent",
-            transition:"all .2s",
-          }}>{l.label}</button>
-        ))}
-      </div>
+        {/* Desktop Links */}
+        <div className="nav-desktop-links">
+          {links.map(l => (
+            <button key={l.id} onClick={() => go(l.id)} style={{
+              padding:"6px 11px", borderRadius:8, fontSize:13, fontWeight:500,
+              color: page === l.id ? "var(--fg0)" : "var(--fg2)",
+              background: page === l.id ? "var(--bg2)" : "transparent",
+              transition:"all .2s",
+            }}>{l.label}</button>
+          ))}
+        </div>
 
-      <div style={{ flex:1 }} />
+        <div style={{ flex:1 }} />
 
-      {/* Actions */}
-      <div style={{ display:"flex", alignItems:"center", gap:6 }}>
-        <button onClick={() => setTheme(t => t === "dark" ? "light" : "dark")} style={{
-          padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)",
-          color:"var(--fg2)", fontSize:14, transition:"all .2s",
-        }}>
-          <Icon name={theme === "dark" ? "sun" : "moon"} size={16} />
-        </button>
-
-        {user ? (<>
-          <button onClick={() => navigate("list-item")} style={{
-            padding:"7px 14px", borderRadius:8, fontSize:12, fontWeight:600,
-            background:"var(--accent)", color:"#fff", border:"1px solid transparent",
-          }}>+ List Item</button>
-          <button onClick={() => navigate("wishlist")} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
-            <Icon name="heart" size={14} />{wishlist.length > 0 ? ` (${wishlist.length})` : ""}
+        {/* Desktop Actions */}
+        <div className="nav-desktop-actions">
+          <button onClick={() => setTheme(t => t === "dark" ? "light" : "dark")} style={{
+            padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)",
+            color:"var(--fg2)", fontSize:14, transition:"all .2s", display:"flex", alignItems:"center",
+          }}>
+            <Icon name={theme === "dark" ? "sun" : "moon"} size={16} />
           </button>
-          <button onClick={() => navigate("cart")} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
-            <Icon name="cart" size={14} />{cart.length > 0 ? ` (${cart.length})` : ""}
-          </button>
-          <div style={{ position:"relative" }}>
-            <button onClick={() => setNotifPanel(p => !p)} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
-              <Icon name="bell" size={14} />
-              {unread > 0 ? <span style={{ fontSize:10, background:"var(--accent)", color:"#fff", borderRadius:10, padding:"1px 5px", marginLeft:3 }}>{unread}</span> : ""}
+
+          {user ? (<>
+            <button onClick={() => go("list-item")} style={{
+              padding:"7px 14px", borderRadius:8, fontSize:12, fontWeight:600,
+              background:"var(--accent)", color:"#fff", border:"1px solid transparent",
+            }}>+ List Item</button>
+            <button onClick={() => go("wishlist")} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
+              <Icon name="heart" size={14} />{wishlist.length > 0 ? ` (${wishlist.length})` : ""}
             </button>
-            {notifPanel && (
-              <div style={{
-                position:"absolute", top:"calc(100%+8px)", right:0, width:340,
-                background:"var(--bg1)", border:"1px solid var(--border2)", borderRadius:12,
-                boxShadow:"var(--shadowLg)", overflow:"hidden", zIndex:200,
-              }}>
-                <div style={{ padding:"14px 16px", borderBottom:"1px solid var(--border)", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-                  <span style={{ fontWeight:600, fontSize:14 }}>Notifications</span>
-                  <button onClick={markAllRead} style={{ fontSize:12, color:"var(--accent)", padding:"4px 8px", borderRadius:6, border:"1px solid var(--border)" }}>Mark all read</button>
-                </div>
-                {notifications.map(n => (
-                  <div key={n.id} style={{
-                    display:"flex", gap:12, padding:"12px 16px",
-                    borderBottom:"1px solid var(--border)",
-                    background: n.read ? "transparent" : "rgba(34,197,94,.04)",
-                  }}>
-                    <div style={{ width:8, height:8, borderRadius:"50%", background: n.read ? "var(--bg3)" : "var(--accent)", marginTop:5, flexShrink:0 }} />
-                    <div>
-                      <div style={{ fontSize:13, fontWeight:500 }}>{n.title}</div>
-                      <div style={{ fontSize:11, color:"var(--fg3)", fontFamily:"'DM Mono',monospace", marginTop:2 }}>{n.time}</div>
-                    </div>
+            <button onClick={() => go("cart")} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
+              <Icon name="cart" size={14} />{cart.length > 0 ? ` (${cart.length})` : ""}
+            </button>
+            <div style={{ position:"relative" }}>
+              <button onClick={() => setNotifPanel(p => !p)} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
+                <Icon name="bell" size={14} />
+                {unread > 0 ? <span style={{ fontSize:10, background:"var(--accent)", color:"#fff", borderRadius:10, padding:"1px 5px", marginLeft:3 }}>{unread}</span> : ""}
+              </button>
+              {notifPanel && (
+                <div className="notif-panel" style={{
+                  position:"absolute", top:"calc(100% + 8px)", right:0, width:340,
+                  background:"var(--bg1)", border:"1px solid var(--border2)", borderRadius:12,
+                  boxShadow:"var(--shadowLg)", overflow:"hidden", zIndex:200,
+                }}>
+                  <div style={{ padding:"14px 16px", borderBottom:"1px solid var(--border)", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                    <span style={{ fontWeight:600, fontSize:14 }}>Notifications</span>
+                    <button onClick={markAllRead} style={{ fontSize:12, color:"var(--accent)", padding:"4px 8px", borderRadius:6, border:"1px solid var(--border)" }}>Mark all read</button>
                   </div>
-                ))}
-                <div style={{ padding:"10px 16px" }}>
-                  <button onClick={() => setNotifPanel(false)} style={{ width:"100%", padding:"7px", border:"1px solid var(--border)", borderRadius:8, color:"var(--fg2)", fontSize:13 }}>Close</button>
+                  {notifications.map(n => (
+                    <div key={n.id} style={{
+                      display:"flex", gap:12, padding:"12px 16px",
+                      borderBottom:"1px solid var(--border)",
+                      background: n.read ? "transparent" : "rgba(34,197,94,.04)",
+                    }}>
+                      <div style={{ width:8, height:8, borderRadius:"50%", background: n.read ? "var(--bg3)" : "var(--accent)", marginTop:5, flexShrink:0 }} />
+                      <div>
+                        <div style={{ fontSize:13, fontWeight:500 }}>{n.title}</div>
+                        <div style={{ fontSize:11, color:"var(--fg3)", fontFamily:"'DM Mono',monospace", marginTop:2 }}>{n.time}</div>
+                      </div>
+                    </div>
+                  ))}
+                  <div style={{ padding:"10px 16px" }}>
+                    <button onClick={() => setNotifPanel(false)} style={{ width:"100%", padding:"7px", border:"1px solid var(--border)", borderRadius:8, color:"var(--fg2)", fontSize:13 }}>Close</button>
+                  </div>
+                </div>
+              )}
+            </div>
+            <Avatar name={user.name} size={32} />
+          </>) : guest ? (<>
+            <button onClick={() => go("cart")} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
+              <Icon name="cart" size={14} />{cart.length > 0 ? ` (${cart.length})` : ""}
+            </button>
+            <button onClick={() => go("login")} style={{ padding:"7px 14px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg1)", fontSize:13 }}>Sign In</button>
+            <button onClick={() => go("signup")} style={{ padding:"7px 14px", borderRadius:8, background:"var(--accent)", color:"#fff", fontSize:13 }}>Sign Up</button>
+          </>) : (<>
+            <button onClick={() => go("login")} style={{ padding:"7px 14px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg1)", fontSize:13 }}>Sign In</button>
+            <button onClick={() => go("signup")} style={{ padding:"7px 14px", borderRadius:8, background:"var(--accent)", color:"#fff", fontSize:13 }}>Get Started</button>
+          </>)}
+        </div>
+
+        {/* Mobile: quick cart/bell + hamburger */}
+        <div style={{ display:"flex", alignItems:"center", gap:6 }} className="nav-mobile-toggle-group">
+          {user && (
+            <button onClick={() => go("cart")} style={{ display:"none" }} className="mob-cart-btn">
+              <Icon name="cart" size={18} />{cart.length > 0 ? <span style={{ fontSize:10, background:"var(--accent)", color:"#fff", borderRadius:10, padding:"1px 5px" }}>{cart.length}</span> : ""}
+            </button>
+          )}
+          <button className="nav-mobile-toggle" onClick={() => setMobileOpen(o => !o)}>
+            <HamburgerIcon open={mobileOpen} />
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Dropdown Menu */}
+      {mobileOpen && (
+        <div className="nav-mobile-menu">
+          {/* Nav links */}
+          <div style={{ padding:"8px 0", borderBottom:"1px solid var(--border)" }}>
+            {links.map(l => (
+              <button key={l.id} onClick={() => go(l.id)} style={{
+                display:"block", width:"100%", textAlign:"left",
+                padding:"12px 20px", fontSize:15, fontWeight:500,
+                color: page === l.id ? "var(--accent)" : "var(--fg1)",
+                background: page === l.id ? "rgba(34,197,94,.06)" : "transparent",
+                borderLeft: page === l.id ? "3px solid var(--accent)" : "3px solid transparent",
+              }}>{l.label}</button>
+            ))}
+          </div>
+
+          {/* Actions */}
+          <div style={{ padding:"12px 20px 16px", display:"flex", flexDirection:"column", gap:8 }}>
+            {user ? (<>
+              <div style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 0", borderBottom:"1px solid var(--border)", marginBottom:4 }}>
+                <Avatar name={user.name} size={32} />
+                <div>
+                  <div style={{ fontSize:13, fontWeight:600 }}>{user.name}</div>
+                  <div style={{ fontSize:11, color:"var(--fg3)" }}>{user.email}</div>
                 </div>
               </div>
-            )}
+              <button onClick={() => go("list-item")} style={{ padding:"11px 16px", background:"var(--accent)", color:"#fff", borderRadius:10, fontWeight:600, fontSize:14, textAlign:"center" }}>+ List an Item</button>
+              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+                <button onClick={() => go("wishlist")} style={{ padding:"10px", border:"1px solid var(--border)", borderRadius:8, fontSize:13, display:"flex", alignItems:"center", justifyContent:"center", gap:6 }}><Icon name="heart" size={14} /> Wishlist {wishlist.length > 0 ? `(${wishlist.length})` : ""}</button>
+                <button onClick={() => go("cart")} style={{ padding:"10px", border:"1px solid var(--border)", borderRadius:8, fontSize:13, display:"flex", alignItems:"center", justifyContent:"center", gap:6 }}><Icon name="cart" size={14} /> Basket {cart.length > 0 ? `(${cart.length})` : ""}</button>
+              </div>
+              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+                <button onClick={() => setTheme(t => t === "dark" ? "light" : "dark")} style={{ padding:"10px", border:"1px solid var(--border)", borderRadius:8, fontSize:13, display:"flex", alignItems:"center", justifyContent:"center", gap:6 }}><Icon name={theme === "dark" ? "sun" : "moon"} size={14} /> {theme === "dark" ? "Light" : "Dark"}</button>
+                <button onClick={() => { doLogout(); setMobileOpen(false); }} style={{ padding:"10px", background:"rgba(239,68,68,.1)", color:"var(--red)", border:"1px solid rgba(239,68,68,.2)", borderRadius:8, fontSize:13 }}>Sign out</button>
+              </div>
+            </>) : guest ? (<>
+              <button onClick={() => go("cart")} style={{ padding:"11px", border:"1px solid var(--border)", borderRadius:8, fontSize:14, display:"flex", alignItems:"center", justifyContent:"center", gap:8 }}><Icon name="cart" size={16} /> Basket {cart.length > 0 ? `(${cart.length})` : ""}</button>
+              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+                <button onClick={() => go("login")} style={{ padding:"11px", border:"1px solid var(--border)", borderRadius:8, fontSize:14 }}>Sign In</button>
+                <button onClick={() => go("signup")} style={{ padding:"11px", background:"var(--accent)", color:"#fff", borderRadius:8, fontSize:14, fontWeight:600 }}>Sign Up</button>
+              </div>
+            </>) : (<>
+              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+                <button onClick={() => go("login")} style={{ padding:"11px", border:"1px solid var(--border)", borderRadius:8, fontSize:14 }}>Sign In</button>
+                <button onClick={() => go("signup")} style={{ padding:"11px", background:"var(--accent)", color:"#fff", borderRadius:8, fontSize:14, fontWeight:600 }}>Get Started</button>
+              </div>
+              <button onClick={() => setTheme(t => t === "dark" ? "light" : "dark")} style={{ padding:"10px", border:"1px solid var(--border)", borderRadius:8, fontSize:13, display:"flex", alignItems:"center", justifyContent:"center", gap:6 }}><Icon name={theme === "dark" ? "sun" : "moon"} size={14} /> {theme === "dark" ? "Light mode" : "Dark mode"}</button>
+            </>)}
           </div>
-          <Avatar name={user.name} size={32} />
-        </>) : guest ? (<>
-          <button onClick={() => navigate("cart")} style={{ padding:"7px 10px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg2)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
-            <Icon name="cart" size={14} />{cart.length > 0 ? ` (${cart.length})` : ""}
-          </button>
-          <span style={{ fontSize:12, color:"var(--fg3)" }}>Guest</span>
-          <button onClick={() => navigate("login")} style={{ padding:"7px 14px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg1)", fontSize:13 }}>Sign In</button>
-          <button onClick={() => navigate("signup")} style={{ padding:"7px 14px", borderRadius:8, background:"var(--accent)", color:"#fff", fontSize:13 }}>Sign Up</button>
-        </>) : (<>
-          <button onClick={() => navigate("login")} style={{ padding:"7px 14px", borderRadius:8, border:"1px solid var(--border)", color:"var(--fg1)", fontSize:13 }}>Sign In</button>
-          <button onClick={() => navigate("signup")} style={{ padding:"7px 14px", borderRadius:8, background:"var(--accent)", color:"#fff", fontSize:13 }}>Get Started</button>
-        </>)}
-      </div>
+        </div>
+      )}
     </nav>
   );
 }
@@ -735,7 +842,7 @@ function Navbar({ navigate, page, user, guest, theme, setTheme, cart, wishlist, 
 // ─── Footer ───────────────────────────────────────────────────────────────────
 function Footer({ navigate }) {
   return (
-    <footer style={{ background:"var(--bg1)", borderTop:"1px solid var(--border)", padding:"40px 24px 28px", marginTop:"auto" }}>
+    <footer style={{ background:"var(--bg1)", borderTop:"1px solid var(--border)", padding:"40px 16px 28px", marginTop:"auto" }}>
       <div style={{ maxWidth:1140, margin:"0 auto" }}>
         <div className="footer-grid" style={{ display:"grid", gridTemplateColumns:"2fr 1fr 1fr 1fr", gap:32, marginBottom:32 }}>
           <div>
@@ -806,17 +913,17 @@ function PageHome({ navigate }) {
             Green Circular Economy Platform · Egypt
             <span style={{ width:32, height:1, background:"var(--accent)", opacity:.4, display:"inline-block" }} />
           </div>
-          <h1 style={{
+          <h1 className="hero-h1" style={{
             fontFamily:"'Playfair Display',serif", fontSize:56, fontWeight:700,
             letterSpacing:"-.03em", lineHeight:1.05, marginBottom:20,
           }}>
             Rescue components.<br/>
             <em style={{ fontStyle:"italic", color:"var(--accent)", fontWeight:400 }}>Close the loop.</em>
           </h1>
-          <p style={{ color:"var(--fg2)", fontSize:17, maxWidth:540, margin:"0 auto 36px", lineHeight:1.75 }}>
+          <p style={{ color:"var(--fg2)", fontSize:17, maxWidth:540, margin:"0 auto 36px", lineHeight:1.75, padding:"0 8px" }}>
             GreenLoop connects university students to share, sell, and discover reusable engineering components — keeping e-waste out of landfills, one project at a time.
           </p>
-          <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:12, flexWrap:"wrap" }}>
+          <div className="hero-buttons" style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:12, flexWrap:"wrap", padding:"0 16px" }}>
             <button onClick={() => navigate("signup")} style={{
               padding:"13px 28px", borderRadius:12, background:"var(--accent)", color:"#fff",
               fontWeight:600, fontSize:15, border:"1px solid transparent",
@@ -832,9 +939,9 @@ function PageHome({ navigate }) {
           </div>
 
           {/* Stats */}
-          <div style={{
+          <div className="hero-stats" style={{
             display:"flex", justifyContent:"center", gap:48, marginTop:56,
-            paddingTop:28, borderTop:"1px solid var(--border)", flexWrap:"wrap",
+            paddingTop:28, borderTop:"1px solid var(--border)", flexWrap:"wrap", padding:"28px 16px 0",
           }}>
             {[
               { num:"1,240+", label:"Components listed" },
@@ -852,8 +959,7 @@ function PageHome({ navigate }) {
       </div>
 
       {/* Featured */}
-      <div style={{ padding:"40px 24px", maxWidth:1140, margin:"0 auto" }}>
-        {/* Banner */}
+      <div style={{ padding:"40px 16px", maxWidth:1140, margin:"0 auto" }}>
         <div style={{
           background:"linear-gradient(135deg,rgba(34,197,94,.1),rgba(20,184,166,.07))",
           border:"1px solid rgba(34,197,94,.2)", borderRadius:12, padding:"14px 20px",
@@ -910,7 +1016,7 @@ function PageHome({ navigate }) {
       </div>
 
       {/* CTA */}
-      <div style={{ padding:"0 24px 48px", textAlign:"center" }}>
+      <div style={{ padding:"0 16px 48px", textAlign:"center" }}>
         <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:22, fontWeight:700, marginBottom:8 }}>Ready to loop in?</h2>
         <p style={{ color:"var(--fg2)", fontSize:14, marginBottom:20 }}>Join 380+ students already making their campus more circular.</p>
         <div style={{ display:"flex", gap:12, justifyContent:"center", flexWrap:"wrap" }}>
@@ -992,7 +1098,7 @@ function PageBrowse({ navigate, searchQ, setSearchQ, activeFilter, setActiveFilt
   });
 
   return (
-    <div className="page-anim" style={{ padding:"40px 24px", maxWidth:1140, margin:"0 auto" }}>
+    <div className="page-anim" style={{ padding:"24px 16px", maxWidth:1140, margin:"0 auto" }}>
       <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:24, flexWrap:"wrap", gap:16 }}>
         <div>
           <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:30, fontWeight:700, letterSpacing:"-.02em" }}>Browse rescued items</h1>
@@ -1058,7 +1164,7 @@ function PageItem({ navigate, pageData, inCart, inWish, addToCart, toggleWish, s
   const cInCart = inCart(r.id), cInWish = inWish(r.id);
 
   return (
-    <div className="page-anim" style={{ padding:"40px 24px", maxWidth:1140, margin:"0 auto" }}>
+    <div className="page-anim" style={{ padding:"24px 16px", maxWidth:1140, margin:"0 auto" }}>
       <button onClick={() => navigate("browse")} style={{ padding:"7px 14px", border:"1px solid var(--border)", borderRadius:8, marginBottom:20, color:"var(--fg2)", fontSize:13 }}>← Back to browse</button>
       <div className="item-grid" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:32, alignItems:"start" }}>
         <div>
@@ -1134,7 +1240,7 @@ function PageItem({ navigate, pageData, inCart, inWish, addToCart, toggleWish, s
             }}>Contact</button>
           </div>
           {/* Price */}
-          <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:20 }}>
+          <div className="item-price-row" style={{ display:"flex", alignItems:"center", gap:12, marginBottom:20 }}>
             <div style={{ fontFamily:"'Playfair Display',serif", fontSize:36, fontWeight:700, color:"var(--accent2)" }}>
               {r.price} <span style={{ fontSize:18, color:"var(--fg2)", fontWeight:400 }}>{r.unit}</span>
             </div>
@@ -1296,7 +1402,27 @@ function PageDashboard({ navigate, user, guest, dashPage, setDashPage, cart, wis
   ];
 
   return (
-    <div className="page-anim dashboard-layout" style={{ display:"grid", gridTemplateColumns:"224px 1fr", minHeight:"calc(100vh - 60px)" }}>
+    <div className="page-anim">
+      {/* Mobile Tab Bar */}
+      <div style={{
+        display:"none", overflowX:"auto", borderBottom:"1px solid var(--border)",
+        background:"var(--bg1)", padding:"0 8px", scrollbarWidth:"none",
+      }} className="dash-mobile-tabs">
+        <style>{`.dash-mobile-tabs { display: flex !important; } @media (min-width: 769px) { .dash-mobile-tabs { display: none !important; } }`}</style>
+        {items.map(s => (
+          <button key={s.id} onClick={() => setDashPage(s.id)} style={{
+            padding:"12px 14px", fontSize:12, fontWeight:500, whiteSpace:"nowrap", flexShrink:0,
+            color: dashPage === s.id ? "var(--accent)" : "var(--fg2)",
+            borderBottom: dashPage === s.id ? "2px solid var(--accent)" : "2px solid transparent",
+            display:"flex", alignItems:"center", gap:6,
+          }}>
+            <Icon name={s.icon} size={14} />{s.label}
+            {s.badge ? <span style={{ fontSize:10, background:"var(--accent)", color:"#fff", padding:"1px 5px", borderRadius:4 }}>{s.badge}</span> : null}
+          </button>
+        ))}
+      </div>
+
+      <div className="dashboard-layout" style={{ display:"grid", gridTemplateColumns:"224px 1fr", minHeight:"calc(100vh - 60px)" }}>
       {/* Sidebar */}
       <div className="dashboard-sidebar" style={{ background:"var(--bg1)", borderRight:"1px solid var(--border)", padding:"16px 0", position:"sticky", top:60, height:"calc(100vh - 60px)", overflowY:"auto" }}>
         <div style={{ padding:"8px 16px 16px" }}>
@@ -1329,9 +1455,10 @@ function PageDashboard({ navigate, user, guest, dashPage, setDashPage, cart, wis
       </div>
 
       {/* Content */}
-      <div style={{ padding:28, overflowY:"auto" }}>
+      <div style={{ padding:"20px 16px", overflowY:"auto" }}>
         <DashContent id={dashPage} name={name} navigate={navigate} wishlist={wishlist} addToast={addToast} setModalContent={setModalContent} />
       </div>
+    </div>
     </div>
   );
 }
@@ -1487,7 +1614,7 @@ function PageCart({ navigate, cart, setCart, addToast, setNotifications, user })
   const total = cart.reduce((s, r) => s + r.price, 0);
   const totalWaste = cart.reduce((s, r) => s + r.wasteKg, 0);
   return (
-    <div className="page-anim" style={{ padding:"40px 24px", maxWidth:760, margin:"0 auto" }}>
+    <div className="page-anim" style={{ padding:"32px 16px", maxWidth:760, margin:"0 auto" }}>
       <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, fontWeight:700, marginBottom:4 }}>My Basket</h1>
       <p style={{ color:"var(--fg2)", fontSize:14, marginBottom:24 }}>{cart.length} {cart.length === 1 ? "item" : "items"} · {totalWaste.toFixed(2)} kg of e-waste being rescued</p>
       {cart.length === 0 ? (
@@ -1538,7 +1665,7 @@ function PageCart({ navigate, cart, setCart, addToast, setNotifications, user })
 // ─── Page: Wishlist ────────────────────────────────────────────────────────────
 function PageWishlist({ navigate, wishlist, toggleWish, addToCart, inCart }) {
   return (
-    <div className="page-anim" style={{ padding:"40px 24px", maxWidth:1140, margin:"0 auto" }}>
+    <div className="page-anim" style={{ padding:"32px 16px", maxWidth:1140, margin:"0 auto" }}>
       <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, fontWeight:700, marginBottom:4 }}>Wishlist</h1>
       <p style={{ color:"var(--fg2)", fontSize:14, marginBottom:24 }}>{wishlist.length} saved items</p>
       {wishlist.length === 0 ? (
@@ -1559,7 +1686,7 @@ function PageWishlist({ navigate, wishlist, toggleWish, addToCart, inCart }) {
 // ─── Page: Checkout ────────────────────────────────────────────────────────────
 function PageCheckout({ navigate, cart, setCart, addToast, setNotifications }) {
   return (
-    <div className="page-anim" style={{ padding:"40px 24px", maxWidth:600, margin:"0 auto" }}>
+    <div className="page-anim" style={{ padding:"32px 16px", maxWidth:600, margin:"0 auto" }}>
       <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, fontWeight:700, marginBottom:4 }}>Confirm reservation</h1>
       <p style={{ color:"var(--fg2)", fontSize:14, marginBottom:28 }}>Review your items and confirm pickup details</p>
       {cart.map(r => (
@@ -1591,7 +1718,7 @@ function PageCheckout({ navigate, cart, setCart, addToast, setNotifications }) {
 // ─── Page: Impact ─────────────────────────────────────────────────────────────
 function PageImpact({ navigate }) {
   return (
-    <div className="page-anim" style={{ padding:"40px 24px", maxWidth:1140, margin:"0 auto" }}>
+    <div className="page-anim" style={{ padding:"32px 16px", maxWidth:1140, margin:"0 auto" }}>
       <div style={{ textAlign:"center", marginBottom:48 }}>
         <div style={{ fontFamily:"'DM Mono',monospace", fontSize:11, color:"var(--accent)", textTransform:"uppercase", letterSpacing:".12em", marginBottom:12 }}>Environmental Impact</div>
         <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:42, fontWeight:700, letterSpacing:"-.02em", marginBottom:16 }}>Our collective <em style={{ fontStyle:"italic", color:"var(--accent)" }}>green impact</em></h1>
@@ -1670,7 +1797,7 @@ function PageImpact({ navigate }) {
 // ─── Page: Campus Map ─────────────────────────────────────────────────────────
 function PageCampusMap({ navigate, activeMapPin, setActiveMapPin }) {
   return (
-    <div className="page-anim" style={{ padding:"40px 24px", maxWidth:1140, margin:"0 auto" }}>
+    <div className="page-anim" style={{ padding:"32px 16px", maxWidth:1140, margin:"0 auto" }}>
       <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:30, fontWeight:700, marginBottom:4 }}>Campus map</h1>
       <p style={{ color:"var(--fg2)", fontSize:14, marginBottom:24 }}>Find rescued components near your campus</p>
       <div className="map-grid" style={{ display:"grid", gridTemplateColumns:"1fr 320px", gap:16, alignItems:"start" }}>
@@ -1725,7 +1852,7 @@ function PageCampusMap({ navigate, activeMapPin, setActiveMapPin }) {
 // ─── Page: Leaderboard ────────────────────────────────────────────────────────
 function PageLeaderboard({ navigate }) {
   return (
-    <div className="page-anim" style={{ padding:"40px 24px", maxWidth:900, margin:"0 auto" }}>
+    <div className="page-anim" style={{ padding:"32px 16px", maxWidth:900, margin:"0 auto" }}>
       <div style={{ textAlign:"center", marginBottom:36 }}>
         <div style={{ fontFamily:"'DM Mono',monospace", fontSize:11, color:"var(--accent)", textTransform:"uppercase", letterSpacing:".12em", marginBottom:12 }}>Community</div>
         <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:36, fontWeight:700, letterSpacing:"-.02em", marginBottom:8 }}>Rescue Champions</h1>
@@ -1768,7 +1895,7 @@ function PageListItem({ navigate, listStep, setListStep, addToast, setNotificati
   const [draft, setDraft] = useState({});
   const update = (k, v) => setDraft(d => ({ ...d, [k]: v }));
   return (
-    <div className="page-anim" style={{ padding:"40px 24px", maxWidth:680, margin:"0 auto" }}>
+    <div className="page-anim" style={{ padding:"32px 16px", maxWidth:680, margin:"0 auto" }}>
       <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, fontWeight:700, marginBottom:4 }}>List a component</h1>
       <p style={{ color:"var(--fg2)", fontSize:14, marginBottom:28 }}>Rescue your old project parts from landfill — list them in under 2 minutes</p>
 
@@ -1850,7 +1977,7 @@ function PageListItem({ navigate, listStep, setListStep, addToast, setNotificati
 // ─── Page: Settings ───────────────────────────────────────────────────────────
 function PageSettings({ navigate, theme, setTheme }) {
   return (
-    <div className="page-anim" style={{ padding:"40px 24px", maxWidth:640, margin:"0 auto" }}>
+    <div className="page-anim" style={{ padding:"32px 16px", maxWidth:640, margin:"0 auto" }}>
       <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, fontWeight:700, marginBottom:4 }}>Settings</h1>
       <p style={{ color:"var(--fg2)", fontSize:14, marginBottom:28 }}>Manage your preferences</p>
       {[
@@ -1885,7 +2012,7 @@ function PageSettings({ navigate, theme, setTheme }) {
 function PageProfile({ navigate, user, doLogout }) {
   if (!user) { navigate("login"); return null; }
   return (
-    <div className="page-anim" style={{ padding:"40px 24px", maxWidth:640, margin:"0 auto" }}>
+    <div className="page-anim" style={{ padding:"32px 16px", maxWidth:640, margin:"0 auto" }}>
       <div style={{ display:"flex", alignItems:"center", gap:20, marginBottom:32 }}>
         <Avatar name={user.name} size={64} />
         <div>
