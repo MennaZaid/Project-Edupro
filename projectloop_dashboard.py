@@ -7,7 +7,8 @@ Run: streamlit run projectloop_dashboard.py
 import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-
+streamlit
+plotly
 st.set_page_config(
     page_title="ProjectLoop — Impact Dashboard",
     page_icon="♻️",
